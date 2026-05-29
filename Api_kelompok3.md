@@ -1,0 +1,16 @@
+Api yang di butuhkan kelompok 3:
+- provinsi 
+- kabupaten/kota
+- mata kuliah
+- nilai
+- prodi
+- jurusan
+- kelas 
+- tahun akademik
+- khs
+- users
+- sks
+- semester
+- status
+- mahasiswa kelas mk
+- pembimbing akademik
