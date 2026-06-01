@@ -578,7 +578,36 @@ Menampilkan seluruh jadwal.
 Menampilkan detail jadwal + daftar mahasiswa.
 
 #### #46. GET `/api/akademik/dosen/kelas`
+
 Menampilkan daftar kelas yang diajar oleh dosen/pegawai yang sedang login (berdasarkan tabel `mahasiswa_kelas_mk`).
+
+**Hak Akses:** Admin Pegawai, Dosen
+
+**Contoh Response:**
+```json
+[
+  {
+    "id": 1,
+    "tahun_akademik_id": 20252,
+    "prodi_id": 3,
+    "kode_kelas": "TI-2A",
+    "nama_kelas": "Teknik Informatika 2A",
+    "kapasitas_mahasiswa": 40,
+    "status": "aktif",
+    "keterangan": null,
+    "prodi": {
+      "id": 3,
+      "jurusan_id": 2,
+      "nama_prodi": "D3 Teknik Informatika"
+    },
+    "tahun_akademik": {
+      "id": 20252,
+      "tahun_akademik": "2025 genap",
+      "status": "aktif"
+    }
+  }
+]
+```
 
 **Total: 13 endpoint**
 
@@ -830,7 +859,36 @@ Menampilkan detail jadwal + daftar mahasiswa.
 Menampilkan profil user yang sedang login.
 
 #### #46. GET `/api/akademik/dosen/kelas`
+
 Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari `mahasiswa_kelas_mk` berdasarkan `dosen_id`).
+
+**Hak Akses:** Admin Pegawai, Dosen
+
+**Contoh Response:**
+```json
+[
+  {
+    "id": 1,
+    "tahun_akademik_id": 20252,
+    "prodi_id": 3,
+    "kode_kelas": "TI-2A",
+    "nama_kelas": "Teknik Informatika 2A",
+    "kapasitas_mahasiswa": 40,
+    "status": "aktif",
+    "keterangan": null,
+    "prodi": {
+      "id": 3,
+      "jurusan_id": 2,
+      "nama_prodi": "D3 Teknik Informatika"
+    },
+    "tahun_akademik": {
+      "id": 20252,
+      "tahun_akademik": "2025 genap",
+      "status": "aktif"
+    }
+  }
+]
+```
 
 **Total: 14 endpoint**
 
@@ -839,7 +897,7 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 ## 📊 Ringkasan Akses
 
 | # | Endpoint | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
-|---|----------|---|---|---|---|---|---|---|
+|---|----------|---|---|---|---|---|---|---|   
 | 1 | GET `/api/akademik/users` | ✅ | - | - | - | - | - | - |
 | 2 | POST `/api/akademik/register` | ✅ | - | - | - | - | - | - |
 | 3 | PUT `/api/akademik/users/{id_user}` | ✅ | - | - | - | - | - | - |
