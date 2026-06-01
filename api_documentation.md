@@ -1,6 +1,6 @@
 # API Documentation — Sistem Akademik Simpadu
 
-> **Base URL:** `http://localhost:8000`  
+> **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
 > **Total Endpoint:** 45
 

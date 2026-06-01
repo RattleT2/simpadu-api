@@ -101,6 +101,7 @@ Route::prefix('akademik')->group(function () {
             Route::put('pertemuan/{id_mahasiswa_mk}', [MahasiswaKelasMkController::class, 'updatePertemuan']); // #16
             Route::get('jadwal', [JadwalController::class, 'index']);                          // #38
             Route::get('jadwal/{id}', [JadwalController::class, 'show']);                      // #39
+            Route::get('dosen/kelas', [KelasController::class, 'dosenKelas']);                  // #46
         });
 
         // Admin Pegawai only (3) - CRUD jadwal

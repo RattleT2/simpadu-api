@@ -98,4 +98,24 @@ class KelasController extends Controller
             'data' => $kelas->load(['prodi', 'tahunAkademik']),
         ]);
     }
+
+    /**
+     * Menampilkan kelas yang diajar oleh dosen yang sedang login.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function dosenKelas()
+    {
+        $dosenId = auth()->id();
+
+        $kelasIds = MahasiswaKelasMk::where('dosen_id', $dosenId)
+            ->distinct()
+            ->pluck('id_kelas');
+
+        $kelas = Kelas::with(['prodi', 'tahunAkademik'])
+            ->whereIn('id', $kelasIds)
+            ->get();
+
+        return response()->json($kelas);
+    }
 }

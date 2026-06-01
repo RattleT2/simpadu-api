@@ -1,8 +1,8 @@
 # Panduan Deploy SIMPADU API — Bitvise + GitHub + VPS
 
 > **Subdomain:** `https://admin4e06.vps-poliban.my.id`  
-> **PHP:** 8.4 | **Laravel:** 12.x | **Auth:** JWT  
-> **SSH:** `konek.vps-poliban.my.id:12206` | User: `root`
+> **PHP:** 8.4 | **Laravel:** 12.x | **Database:** SQLite | **Auth:** JWT  
+> **Web Server:** Apache | **SSH:** `konek.vps-poliban.my.id:12206` | User: `root`
 
 ---
 
@@ -88,13 +88,13 @@ Buka `https://github.com/USERNAME/simpadu-api` di browser — semua file kecuali
 
 ### B2. Install System Dependencies
 
-Di terminal Bitvise, jalankan SATU PER SATU:
+Di terminal Bitvise, jalankan **SATU PER SATU:**
 
 ```bash
 apt update && apt upgrade -y
 ```
 
-Jika muncul prompt *"What do you want to do about modified configuration file sshd_config?"* → ketik **`2`** lalu Enter.
+> Jika muncul prompt *"What do you want to do about modified configuration file sshd_config?"* → ketik **`2`** lalu Enter.
 
 ```bash
 apt install -y software-properties-common
@@ -103,13 +103,24 @@ apt update
 ```
 
 ```bash
-apt install -y nginx mysql-server php8.4 php8.4-fpm \
-php8.4-mysql php8.4-mbstring php8.4-xml php8.4-curl \
-php8.4-zip php8.4-bcmath composer unzip curl git
+apt install -y php8.4 php8.4-fpm php8.4-mysql php8.4-sqlite3 \
+php8.4-mbstring php8.4-xml php8.4-curl php8.4-zip php8.4-bcmath \
+composer unzip curl git
 ```
 
 ```bash
-apt install -y certbot python3-certbot-nginx
+apt install -y certbot python3-certbot-apache
+```
+
+> **Catatan:** `php8.4-mysql` tetap diinstall karena Laravel migration membutuhkan driver PDO walaupun kita pakai SQLite.
+
+#### ⚠️ Matikan Nginx (Jika Terinstall Sebelumnya)
+
+Karena server kampus sudah pakai **Apache**, pastikan Nginx tidak berjalan:
+
+```bash
+systemctl stop nginx 2>/dev/null
+systemctl disable nginx 2>/dev/null
 ```
 
 ---
@@ -134,9 +145,9 @@ cd simpadu-api
 
 ```bash
 composer install --no-dev --optimize-autoloader
-php artisan key:generate
-php artisan storage:link
 ```
+
+> **Deprecation warning** (E_STRICT, implicitly marking parameter) **bisa diabaikan** — hanya warning dari Composer versi lama, tidak mempengaruhi aplikasi.
 
 ---
 
@@ -147,7 +158,7 @@ cp .env.example .env
 nano .env
 ```
 
-Isi `.env` dengan nilai berikut (edit bagian yang perlu):
+**Hapus SEMUA isi `.env`**, lalu copy-paste seluruh teks di bawah ini:
 
 ```env
 APP_NAME=SIMPADU
@@ -155,12 +166,7 @@ APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://admin4e06.vps-poliban.my.id
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=simpadu
-DB_USERNAME=simpadu
-DB_PASSWORD=PasswordSimpadu2024!
+DB_CONNECTION=sqlite
 
 JWT_SECRET=yiBfq7h2C1Sp00IJFhy4veiRWoI7YVWgmrz0wBiyImcrvK86Jp5K8sA0n5mhgWbE
 JWT_ALGO=HS256
@@ -172,25 +178,26 @@ QUEUE_CONNECTION=sync
 
 > **Cara simpan di nano:** `Ctrl+X` → `Y` → `Enter`
 
+```bash
+php artisan key:generate
+php artisan storage:link
+```
+
 ---
 
-### B6. Setup MySQL Database
+### B6. Setup SQLite Database
 
 ```bash
-mysql -u root
+# Buat file database kosong
+touch database/database.sqlite
+
+# Beri permission agar Apache/PHP bisa membaca & menulis
+chown www-data:www-data database/database.sqlite
+chmod 775 database/database.sqlite
 ```
 
-Di dalam MySQL prompt, jalankan:
-
-```sql
-CREATE DATABASE simpadu CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'simpadu'@'localhost' IDENTIFIED BY 'PasswordSimpadu2024!';
-GRANT ALL PRIVILEGES ON simpadu.* TO 'simpadu'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
-```
-
-> **Catatan:** `PasswordSimpadu2024!` harus SAMA dengan `DB_PASSWORD` di `.env`.
+> **Done.** Tidak perlu service MySQL, tidak perlu user/password DB.  
+> SQLite hanya butuh 1 file — `database/database.sqlite`.
 
 ---
 
@@ -222,78 +229,76 @@ Database\Seeders\UserSeeder ........ DONE
 
 ---
 
-### B8. Setup Nginx
+### B8. Setup Apache Virtual Host
+
+#### 8a. Enable Modul yang Dibutuhkan Laravel
 
 ```bash
-nano /etc/nginx/sites-available/simpadu
+a2enmod rewrite
+a2enmod proxy_fcgi setenvif
+a2enconf php8.4-fpm
+```
+
+#### 8b. Buat Virtual Host
+
+```bash
+nano /etc/apache2/sites-available/simpadu.conf
 ```
 
 Copy-paste SELURUH konfigurasi berikut:
 
-```nginx
-server {
-    listen 80;
-    server_name admin4e06.vps-poliban.my.id;
-    root /var/www/simpadu-api/public;
+```apache
+<VirtualHost *:80>
+    ServerName admin4e06.vps-poliban.my.id
+    DocumentRoot /var/www/simpadu-api/public
 
-    add_header X-Frame-Options "SAMEORIGIN";
-    add_header X-Content-Type-Options "nosniff";
+    <Directory /var/www/simpadu-api/public>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
 
-    index index.php;
-    charset utf-8;
-
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location = /favicon.ico { access_log off; log_not_found off; }
-    location = /robots.txt  { access_log off; log_not_found off; }
-
-    error_page 404 /index.php;
-
-    location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
-
-    location ~ /\.(?!well-known).* {
-        deny all;
-    }
-}
+    ErrorLog ${APACHE_LOG_DIR}/simpadu-error.log
+    CustomLog ${APACHE_LOG_DIR}/simpadu-access.log combined
+</VirtualHost>
 ```
 
 Simpan: `Ctrl+X` → `Y` → `Enter`
 
+#### 8c. Aktifkan Situs
+
 ```bash
-ln -s /etc/nginx/sites-available/simpadu /etc/nginx/sites-enabled/
-rm -f /etc/nginx/sites-enabled/default
-nginx -t
+a2dissite 000-default.conf
+a2ensite simpadu.conf
+apache2ctl configtest
 ```
 
-Jika output: `syntax is ok` dan `test is successful`, lanjutkan:
+Jika output: `Syntax OK`, lanjutkan:
 
 ```bash
-systemctl restart nginx
+systemctl restart apache2
 systemctl restart php8.4-fpm
-systemctl enable nginx
+systemctl enable apache2
 systemctl enable php8.4-fpm
 ```
 
 ---
 
-### B9. Permission & SSL
+### B9. Permission
 
 ```bash
 chown -R www-data:www-data /var/www/simpadu-api
 chmod -R 775 /var/www/simpadu-api/storage
 chmod -R 775 /var/www/simpadu-api/bootstrap/cache
+chmod -R 775 /var/www/simpadu-api/database
 ```
 
-SSL dengan Let's Encrypt:
+---
+
+### B10. SSL dengan Let's Encrypt
 
 ```bash
-certbot --nginx -d admin4e06.vps-poliban.my.id
+certbot --apache -d admin4e06.vps-poliban.my.id
 ```
 
 Isi prompt:
@@ -304,7 +309,7 @@ Isi prompt:
 
 ---
 
-### B10. Test API — Pastikan Backend Berfungsi
+### B11. Test API — Pastikan Backend Berfungsi
 
 ```bash
 curl -X POST https://admin4e06.vps-poliban.my.id/api/akademik/login \
@@ -328,9 +333,16 @@ curl -X POST https://admin4e06.vps-poliban.my.id/api/akademik/login \
 }
 ```
 
+Test endpoint protected (pakai token dari response di atas):
+
+```bash
+curl -X GET https://admin4e06.vps-poliban.my.id/api/akademik/users/me \
+  -H "Authorization: Bearer TOKEN_DARI_LOGIN"
+```
+
 ---
 
-### B11. Production Cache
+### B12. Production Cache
 
 ```bash
 php artisan config:cache
@@ -389,15 +401,18 @@ php artisan config:cache
 
 | Error | Solusi |
 |-------|--------|
-| `502 Bad Gateway` | `systemctl restart php8.4-fpm` |
-| `SQLSTATE[HY000] [1045] Access denied` | Cek `DB_USERNAME` & `DB_PASSWORD` di `.env` — harus sama dengan yang dibuat di MySQL |
-| `SQLSTATE[42S02] Base table not found` | Jalankan ulang: `php artisan migrate` |
-| `Token not provided` (saat test endpoint protected) | Pastikan mengirim header `Authorization: Bearer {token}` |
+| `503 Service Unavailable` | `systemctl restart php8.4-fpm && systemctl restart apache2` |
+| `500 Internal Server Error` | Cek log: `tail -f /var/log/apache2/simpadu-error.log` |
+| `404 Not Found` (route Laravel) | Pastikan `a2enmod rewrite` sudah dijalankan + `AllowOverride All` ada di virtual host |
 | `file_put_contents(...) Permission denied` | `chown -R www-data:www-data /var/www/simpadu-api && chmod -R 775 /var/www/simpadu-api/storage` |
-| Nginx test gagal | Cek syntax: pastikan semua `;` dan `{}` sesuai. Jalankan `nginx -t` untuk melihat error |
-| certbot gagal | Pastikan subdomain sudah mengarah ke IP server VPS (atur di DNS management) |
+| `SQLSTATE[HY000] unable to open database file` | Permission SQLite: `chmod 775 database/database.sqlite && chown www-data:www-data database/database.sqlite` |
+| Apache config test gagal | Cek syntax: `apache2ctl configtest` — pastikan direktori `/var/www/simpadu-api/public` ada |
+| certbot gagal | Pastikan subdomain sudah mengarah ke IP server VPS |
 | `Command 'php8.4' not found` | Jalankan ulang STEP B2 (PPA PHP) |
+| `file_get_contents(.../.env): Failed to open stream` | Jalankan dulu: `cp .env.example .env` lalu `php artisan key:generate` |
 | Login gagal "Invalid email or password" | Pastikan seeder sudah jalan: `php artisan db:seed --class=UserSeeder` |
+| Port 80 already in use | Nginx terinstall? Jalankan: `systemctl stop nginx && systemctl disable nginx` |
+| `System has not been booted with systemd` | Anda di dalam Docker container — gunakan `service apache2 start` bukan `systemctl` |
 
 ---
 
