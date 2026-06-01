@@ -2,7 +2,7 @@
 
 > **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
-> **Total Endpoint:** 45
+> **Total Endpoint:** 46
 
 ---
 
@@ -577,7 +577,10 @@ Menampilkan seluruh jadwal.
 #### #39. GET `/api/akademik/jadwal/{id}`
 Menampilkan detail jadwal + daftar mahasiswa.
 
-**Total: 12 endpoint**
+#### #46. GET `/api/akademik/dosen/kelas`
+Menampilkan daftar kelas yang diajar oleh dosen/pegawai yang sedang login (berdasarkan tabel `mahasiswa_kelas_mk`).
+
+**Total: 13 endpoint**
 
 ---
 
@@ -785,6 +788,54 @@ Menampilkan profil user yang sedang login (termasuk status).
 
 ---
 
+## 🟣 DOSEN (role_id: 7)
+
+#### #5. GET `/api/akademik/tahun-akademik`
+Menampilkan seluruh data tahun akademik.
+
+#### #7. GET `/api/akademik/kelas`
+Menampilkan seluruh data kelas.
+
+#### #8. GET `/api/akademik/kelas/{id_kelas}`
+Menampilkan detail satu kelas.
+
+#### #9. GET `/api/akademik/kelas/{id_kelas}/mahasiswa`
+Menampilkan daftar mahasiswa di kelas tersebut.
+
+#### #14. POST `/api/akademik/nilais`
+Menambahkan Nilai Mahasiswa.
+
+#### #16. PUT `/api/akademik/pertemuan/{id_mahasiswa_mk}`
+Mengupdate isi absensi pertemuan p1-p16.
+
+#### #21. GET `/api/akademik/mata-kuliah`
+Menampilkan daftar mata kuliah.
+
+#### #22. GET `/api/akademik/mata-kuliah/{id_mk}`
+Menampilkan detail satu mata kuliah.
+
+#### #25. GET `/api/akademik/mahasiswa-kelas`
+Menampilkan seluruh data plotting.
+
+#### #26. GET `/api/akademik/mahasiswa-kelas/{id}`
+Menampilkan detail plotting.
+
+#### #38. GET `/api/akademik/jadwal`
+Menampilkan seluruh jadwal.
+
+#### #39. GET `/api/akademik/jadwal/{id}`
+Menampilkan detail jadwal + daftar mahasiswa.
+
+#### #45. GET `/api/akademik/users/me`
+Menampilkan profil user yang sedang login.
+
+#### #46. GET `/api/akademik/dosen/kelas`
+Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari `mahasiswa_kelas_mk` berdasarkan `dosen_id`).
+
+**Total: 14 endpoint**
+
+---
+
 ## 📊 Ringkasan Akses
 
 | # | Endpoint | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
@@ -834,6 +885,7 @@ Menampilkan profil user yang sedang login (termasuk status).
 | 43 | GET `/api/akademik/wilayah/provinsi` | ✅ | - | - | ✅ | - | ✅ | - |
 | 44 | GET `/api/akademik/wilayah/provinsi/{id}/kabupaten` | ✅ | - | - | ✅ | - | ✅ | - |
 | 45 | GET `/api/akademik/users/me` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 46 | GET `/api/akademik/dosen/kelas` | - | - | ✅ | - | - | - | ✅ |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  
