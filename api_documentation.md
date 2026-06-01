@@ -960,3 +960,5 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 | Admin Pegawai | admin.pegawai@simpadu.ac.id | admin123 |
 | Admin Mahasiswa | admin.mahasiswa@simpadu.ac.id | admin123 |
 | Admin Keuangan | admin.keuangan@simpadu.ac.id | admin123 |
+| Dosen TI | dosen.ti@simpadu.ac.id | admin123 |
+| Dosen Manajemen | dosen.manajemen@simpadu.ac.id | admin123 |
