@@ -88,6 +88,7 @@ Route::prefix('akademik')->group(function () {
         // Super Admin + Admin Akademik + Admin Mahasiswa (1,2,4)
         Route::middleware('role:1,2,4')->group(function () {
             Route::get('mahasiswa', [UserController::class, 'mahasiswa']);                          // #34
+            Route::get('dosen', [UserController::class, 'dosen']);                                  // #47
         });
 
         // Admin Akademik - all mahasiswa nilai (role = 2)

@@ -159,6 +159,21 @@ class UserController extends Controller
     }
 
     /**
+     * Menampilkan list seluruh dosen aktif (role_id = 7, status = aktif).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function dosen()
+    {
+        $users = User::where('role_id', 7)
+            ->where('status', 'aktif')
+            ->with('roles')
+            ->get();
+
+        return response()->json($users);
+    }
+
+    /**
      * Mengubah status mahasiswa (aktif/nonaktif).
      *
      * @param MahasiswaStatusRequest $request

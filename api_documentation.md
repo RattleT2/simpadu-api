@@ -2,7 +2,7 @@
 
 > **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
-> **Total Endpoint:** 46
+> **Total Endpoint:** 47
 
 ---
 
@@ -155,7 +155,7 @@ Reset password user. Password baru otomatis di-hash oleh Laravel.
 
 ## 🟠 ADMIN AKADEMIK (role_id: 2)
 
-> Admin Akademik memiliki akses terbanyak — **27 endpoint**.
+> Admin Akademik memiliki akses terbanyak — **28 endpoint**.
 
 ---
 
@@ -542,6 +542,33 @@ Membatalkan/menghapus mahasiswa dari plotting.
 
 ---
 
+#### #47. GET `/api/akademik/dosen`
+
+Menampilkan list seluruh dosen pengajar yang berstatus aktif (role_id = 7, status = aktif).
+
+**Hak Akses:** Super Admin, Admin Akademik, Admin Mahasiswa
+
+**Contoh Response:**
+```json
+[
+  {
+    "id": 6,
+    "name": "Dosen Teknik Informatika",
+    "username": "dosenti",
+    "nomor_identitas": "DSN001",
+    "email": "dosen.ti@simpadu.ac.id",
+    "role_id": 7,
+    "status": "aktif",
+    "roles": [
+      { "id_role": 7, "nama_role": "dosen" },
+      { "id_role": 8, "nama_role": "pegawai" }
+    ]
+  }
+]
+```
+
+---
+
 ## 🟡 ADMIN PEGAWAI (role_id: 3)
 
 #### #5. GET `/api/akademik/tahun-akademik`
@@ -686,6 +713,14 @@ Menampilkan list seluruh mahasiswa (role_id = 6).
 
 ---
 
+### #47. GET `/api/akademik/dosen`
+
+Menampilkan list seluruh dosen pengajar yang berstatus aktif.
+
+**Hak Akses:** Super Admin, Admin Akademik, Admin Mahasiswa
+
+---
+
 #### #35. PUT `/api/akademik/mahasiswa/{id_user}/status`
 
 Mengubah status mahasiswa (aktif/nonaktif).
@@ -715,7 +750,7 @@ Menampilkan kabupaten dalam satu provinsi.
 
 **Hak Akses:** Super Admin, Admin Mahasiswa
 
-**Total: 20 endpoint**
+**Total: 21 endpoint**
 
 ---
 
@@ -944,6 +979,7 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 | 44 | GET `/api/akademik/wilayah/provinsi/{id}/kabupaten` | ✅ | - | - | ✅ | - | ✅ | - |
 | 45 | GET `/api/akademik/users/me` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 46 | GET `/api/akademik/dosen/kelas` | - | - | ✅ | - | - | - | ✅ |
+| 47 | GET `/api/akademik/dosen` | ✅ | ✅ | - | ✅ | - | - | - |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  
