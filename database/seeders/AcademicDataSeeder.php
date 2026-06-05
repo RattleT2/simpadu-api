@@ -1,0 +1,284 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+class AcademicDataSeeder extends Seeder
+{
+    private array $namaDepan = [
+        'Ahmad', 'Siti', 'Budi', 'Dewi', 'Rudi', 'Indah', 'Agus', 'Rina',
+        'Hendra', 'Maya', 'Dedi', 'Rizky', 'Putri', 'Bayu', 'Nia', 'Ferdy',
+        'Saras', 'Anton', 'Citra', 'Dimas', 'Eka', 'Fajar', 'Gita', 'Hadi',
+        'Irma', 'Joko', 'Kartika', 'Lukman', 'Mega', 'Novi', 'Oka', 'Pipit',
+    ];
+
+    private array $namaBelakang = [
+        'Fauzi', 'Nurhaliza', 'Santoso', 'Lestari', 'Hermawan', 'Permata',
+        'Setiawan', 'Pratama', 'Marlina', 'Gunawan', 'Sari', 'Kurniawan',
+        'Ramadhan', 'Anggraini', 'Saputra', 'Nugroho', 'Wati', 'Hidayat',
+        'Purnama', 'Wijaya', 'Kusuma', 'Halim', 'Putra', 'Syahputra',
+    ];
+
+    private array $kelasConfig = [
+        1  => ['prefix' => 'TI2A',  'count' => 20],
+        2  => ['prefix' => 'TI2B',  'count' => 20],
+        3  => ['prefix' => 'TI4A',  'count' => 15],
+        4  => ['prefix' => 'AB2A',  'count' => 20],
+        5  => ['prefix' => 'AB2B',  'count' => 15],
+        6  => ['prefix' => 'BD2A',  'count' => 15],
+        7  => ['prefix' => 'EL2A',  'count' => 20],
+        8  => ['prefix' => 'EL4A',  'count' => 10],
+        9  => ['prefix' => 'TL2A',  'count' => 15],
+        10 => ['prefix' => 'SI2A',  'count' => 15],
+        11 => ['prefix' => 'TRPE',  'count' => 10],
+        12 => ['prefix' => 'SIKC',  'count' => 10],
+        13 => ['prefix' => 'TRO4',  'count' => 10],
+        14 => ['prefix' => 'TI6A',  'count' => 10],
+    ];
+
+    private array $kelasMkMap = [
+        1  => ['dosen_id' => 6, 'mks' => [1, 2]],
+        2  => ['dosen_id' => 6, 'mks' => [1, 19]],
+        3  => ['dosen_id' => 6, 'mks' => [3, 19]],
+        4  => ['dosen_id' => 7, 'mks' => [4, 6]],
+        5  => ['dosen_id' => 7, 'mks' => [5, 18]],
+        6  => ['dosen_id' => 7, 'mks' => [7, 8]],
+        7  => ['dosen_id' => 6, 'mks' => [9, 20]],
+        8  => ['dosen_id' => 6, 'mks' => [9, 20]],
+        9  => ['dosen_id' => 6, 'mks' => [10, 11]],
+        10 => ['dosen_id' => 7, 'mks' => [16, 17]],
+        11 => ['dosen_id' => 6, 'mks' => [12]],
+        12 => ['dosen_id' => 6, 'mks' => [13]],
+        13 => ['dosen_id' => 6, 'mks' => [14, 15]],
+        14 => ['dosen_id' => 6, 'mks' => [3, 19]],
+    ];
+
+    public function run(): void
+    {
+        Schema::disableForeignKeyConstraints();
+
+        $tables = [
+            'nilais', 'k_h_s', 'mahasiswa_kelas', 'mahasiswa_kelas_mk',
+            'jadwals', 'kelas', 'mata_kuliahs', 'prodis', 'jurusans', 'tahun_akademiks',
+        ];
+
+        foreach ($tables as $table) {
+            DB::table($table)->delete();
+        }
+
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            DB::statement("DELETE FROM sqlite_sequence WHERE name IN ('" . implode("','", $tables) . "')");
+        }
+
+        Schema::enableForeignKeyConstraints();
+
+        $this->seedJurusans();
+        $this->seedProdis();
+        $this->seedTahunAkademik();
+        $this->seedMataKuliah();
+        $this->seedKelas();
+        $this->seedMahasiswaDenganKelas();
+        $this->seedJadwals();
+    }
+
+    private function seedJurusans(): void
+    {
+        DB::table('jurusans')->insert([
+            ['id' => 1, 'nama_jurusan' => 'Administrasi Bisnis', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'nama_jurusan' => 'Teknik Elektro',        'created_at' => now(), 'updated_at' => now()],
+        ]);
+    }
+
+    private function seedProdis(): void
+    {
+        DB::table('prodis')->insert([
+            ['id' => 1, 'jurusan_id' => 1, 'nama_prodi' => 'D3 Administrasi Bisnis',                      'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'jurusan_id' => 1, 'nama_prodi' => 'D4 Bisnis Digital',                            'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3, 'jurusan_id' => 2, 'nama_prodi' => 'D4 Teknologi Rekayasa Pembangkit Energi',      'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4, 'jurusan_id' => 2, 'nama_prodi' => 'D4 Sistem Informasi Kota Cerdas',              'created_at' => now(), 'updated_at' => now()],
+            ['id' => 5, 'jurusan_id' => 2, 'nama_prodi' => 'D4 Teknologi Rekayasa Otomasi',                'created_at' => now(), 'updated_at' => now()],
+            ['id' => 6, 'jurusan_id' => 2, 'nama_prodi' => 'D3 Elektronika',                               'created_at' => now(), 'updated_at' => now()],
+            ['id' => 7, 'jurusan_id' => 2, 'nama_prodi' => 'D3 Teknik Informatika',                        'created_at' => now(), 'updated_at' => now()],
+            ['id' => 8, 'jurusan_id' => 2, 'nama_prodi' => 'D3 Teknik Listrik',                            'created_at' => now(), 'updated_at' => now()],
+            ['id' => 9, 'jurusan_id' => 1, 'nama_prodi' => 'D3 Sistem Informasi',                          'created_at' => now(), 'updated_at' => now()],
+        ]);
+    }
+
+    private function seedTahunAkademik(): void
+    {
+        DB::table('tahun_akademiks')->insert([
+            ['id' => 20251, 'tahun_akademik' => '2025 ganjil', 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 20252, 'tahun_akademik' => '2025 genap',  'status' => 'aktif',    'created_at' => now(), 'updated_at' => now()],
+        ]);
+    }
+
+    private function seedMataKuliah(): void
+    {
+        DB::table('mata_kuliahs')->insert([
+            ['id_mk' => 1,  'prodi_id' => 7, 'nama_mk' => 'Algoritma dan Pemrograman',    'sks' => 4, 'semester' => 1, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 2,  'prodi_id' => 7, 'nama_mk' => 'Struktur Data',                 'sks' => 3, 'semester' => 3, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 3,  'prodi_id' => 7, 'nama_mk' => 'Basis Data',                    'sks' => 3, 'semester' => 4, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 4,  'prodi_id' => 1, 'nama_mk' => 'Pengantar Bisnis',              'sks' => 2, 'semester' => 1, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 5,  'prodi_id' => 1, 'nama_mk' => 'Manajemen',                     'sks' => 3, 'semester' => 2, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 6,  'prodi_id' => 1, 'nama_mk' => 'Akuntansi Dasar',               'sks' => 3, 'semester' => 1, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 7,  'prodi_id' => 2, 'nama_mk' => 'Bisnis Digital',                'sks' => 3, 'semester' => 3, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 8,  'prodi_id' => 2, 'nama_mk' => 'E-Commerce',                    'sks' => 3, 'semester' => 4, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 9,  'prodi_id' => 6, 'nama_mk' => 'Elektronika Dasar',             'sks' => 4, 'semester' => 1, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 10, 'prodi_id' => 8, 'nama_mk' => 'Rangkaian Listrik',             'sks' => 3, 'semester' => 2, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 11, 'prodi_id' => 8, 'nama_mk' => 'Instalasi Listrik',             'sks' => 3, 'semester' => 3, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 12, 'prodi_id' => 3, 'nama_mk' => 'Energi Terbarukan',             'sks' => 3, 'semester' => 4, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 13, 'prodi_id' => 4, 'nama_mk' => 'Sistem Informasi Kota',         'sks' => 3, 'semester' => 4, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 14, 'prodi_id' => 5, 'nama_mk' => 'Sistem Kontrol',                'sks' => 3, 'semester' => 5, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 15, 'prodi_id' => 5, 'nama_mk' => 'Otomasi Industri',              'sks' => 4, 'semester' => 6, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 16, 'prodi_id' => 9, 'nama_mk' => 'Sistem Informasi Manajemen',    'sks' => 3, 'semester' => 2, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 17, 'prodi_id' => 9, 'nama_mk' => 'Analisis Sistem',               'sks' => 3, 'semester' => 3, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 18, 'prodi_id' => 1, 'nama_mk' => 'Kewirausahaan',                 'sks' => 2, 'semester' => 5, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 19, 'prodi_id' => 7, 'nama_mk' => 'Pemrograman Web',               'sks' => 3, 'semester' => 5, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id_mk' => 20, 'prodi_id' => 6, 'nama_mk' => 'Mikrokontroler',                'sks' => 3, 'semester' => 3, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+        ]);
+    }
+
+    private function seedKelas(): void
+    {
+        DB::table('kelas')->insert([
+            ['id' => 1,  'tahun_akademik_id' => 20252, 'prodi_id' => 7, 'kode_kelas' => 'TI-2A',  'nama_kelas' => 'Teknik Informatika 2A',   'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2,  'tahun_akademik_id' => 20252, 'prodi_id' => 7, 'kode_kelas' => 'TI-2B',  'nama_kelas' => 'Teknik Informatika 2B',   'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3,  'tahun_akademik_id' => 20252, 'prodi_id' => 7, 'kode_kelas' => 'TI-4A',  'nama_kelas' => 'Teknik Informatika 4A',   'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4,  'tahun_akademik_id' => 20252, 'prodi_id' => 1, 'kode_kelas' => 'AB-2A',  'nama_kelas' => 'Administrasi Bisnis 2A',   'kapasitas_mahasiswa' => 45, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 5,  'tahun_akademik_id' => 20252, 'prodi_id' => 1, 'kode_kelas' => 'AB-2B',  'nama_kelas' => 'Administrasi Bisnis 2B',   'kapasitas_mahasiswa' => 45, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 6,  'tahun_akademik_id' => 20252, 'prodi_id' => 2, 'kode_kelas' => 'BD-2A',  'nama_kelas' => 'Bisnis Digital 2A',       'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 7,  'tahun_akademik_id' => 20252, 'prodi_id' => 6, 'kode_kelas' => 'EL-2A',  'nama_kelas' => 'Elektronika 2A',          'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 8,  'tahun_akademik_id' => 20252, 'prodi_id' => 6, 'kode_kelas' => 'EL-4A',  'nama_kelas' => 'Elektronika 4A',          'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 9,  'tahun_akademik_id' => 20252, 'prodi_id' => 8, 'kode_kelas' => 'TL-2A',  'nama_kelas' => 'Teknik Listrik 2A',       'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 10, 'tahun_akademik_id' => 20252, 'prodi_id' => 9, 'kode_kelas' => 'SI-2A',  'nama_kelas' => 'Sistem Informasi 2A',     'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 11, 'tahun_akademik_id' => 20252, 'prodi_id' => 3, 'kode_kelas' => 'TRPE-4A','nama_kelas' => 'TR Pembangkit Energi 4A',  'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 12, 'tahun_akademik_id' => 20252, 'prodi_id' => 4, 'kode_kelas' => 'SIKC-4A','nama_kelas' => 'SI Kota Cerdas 4A',        'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 13, 'tahun_akademik_id' => 20252, 'prodi_id' => 5, 'kode_kelas' => 'TRO-4A', 'nama_kelas' => 'TR Otomasi 4A',            'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 14, 'tahun_akademik_id' => 20251, 'prodi_id' => 7, 'kode_kelas' => 'TI-6A',  'nama_kelas' => 'Teknik Informatika 6A',   'kapasitas_mahasiswa' => 30, 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+        ]);
+    }
+
+    private function seedMahasiswaDenganKelas(): void
+    {
+        $depan = $this->namaDepan;
+        $belakang = $this->namaBelakang;
+        shuffle($depan);
+        shuffle($belakang);
+
+        $usedUsernames = [];
+        $userId = 8;
+        $totalCreated = 0;
+
+        foreach ($this->kelasConfig as $kelasId => $config) {
+            $tahunAkademikId = in_array($kelasId, [14]) ? 20251 : 20252;
+
+            for ($i = 0; $i < $config['count']; $i++, $userId++) {
+                $firstIndex = ($totalCreated + $i * 7) % count($depan);
+                $lastIndex = ($totalCreated * 3 + $i * 11) % count($belakang);
+                $name = $depan[$firstIndex] . ' ' . $belakang[$lastIndex];
+
+                $baseUsername = strtolower(str_replace(' ', '', $name));
+                $username = $this->makeUniqueUsername($baseUsername, $usedUsernames);
+                $usedUsernames[] = $username;
+
+                $nim = $config['prefix'] . str_pad($config['count'] > 99 ? $i + 1 : (string)($i + 1), $config['count'] > 99 ? 3 : 3, '0', STR_PAD_LEFT);
+                // Actually just pad to 3 digits always
+                $nim = $config['prefix'] . str_pad((string)($i + 1), 3, '0', STR_PAD_LEFT);
+
+                $email = strtolower($nim) . '@mahasiswa.ac.id';
+
+                $userData = [
+                    'name' => $name,
+                    'username' => $username,
+                    'nomor_identitas' => $nim,
+                    'email' => $email,
+                    'password' => bcrypt('mahasiswa123'),
+                    'role_id' => 6,
+                    'status' => 'aktif',
+                ];
+
+                $existingUser = DB::table('users')->where('id', $userId)->first();
+
+                if ($existingUser) {
+                    DB::table('users')->where('id', $userId)->update(array_merge($userData, [
+                        'updated_at' => now(),
+                    ]));
+                } else {
+                    DB::table('users')->insert(array_merge($userData, [
+                        'id' => $userId,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]));
+                }
+
+                DB::table('role_user')->where('user_id', $userId)->delete();
+                DB::table('role_user')->insert(['user_id' => $userId, 'role_id' => 6]);
+
+                DB::table('mahasiswa_kelas')->insert([
+                    'mahasiswa_id' => $userId,
+                    'kelas_id' => $kelasId,
+                    'tahun_akademik_id' => $tahunAkademikId,
+                    'status' => 'aktif',
+                    'tanggal_daftar' => now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                if (isset($this->kelasMkMap[$kelasId])) {
+                    $mkMap = $this->kelasMkMap[$kelasId];
+                    foreach ($mkMap['mks'] as $mkId) {
+                        DB::table('mahasiswa_kelas_mk')->insert([
+                            'mata_kuliah_id' => $mkId,
+                            'dosen_id' => $mkMap['dosen_id'],
+                            'id_kelas' => $kelasId,
+                            'nim' => $nim,
+                            'status_id' => 'aktif',
+                        ]);
+                    }
+                }
+
+                $totalCreated++;
+            }
+        }
+
+        $this->command?->info("Seeded {$totalCreated} mahasiswa across " . count($this->kelasConfig) . ' kelas.');
+    }
+
+    private function makeUniqueUsername(string $base, array $used): string
+    {
+        if (!in_array($base, $used, true)) {
+            return $base;
+        }
+
+        $suffix = 2;
+        while (in_array($base . $suffix, $used, true)) {
+            $suffix++;
+        }
+
+        return $base . $suffix;
+    }
+
+    private function seedJadwals(): void
+    {
+        DB::table('jadwals')->insert([
+            ['id' => 1,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20252, 'hari' => 'Senin',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2,  'mata_kuliah_id' => 2,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20252, 'hari' => 'Selasa', 'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 2,  'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4,  'mata_kuliah_id' => 3,  'dosen_id' => 6, 'id_kelas' => 3,  'tahun_akademik_id' => 20252, 'hari' => 'Kamis',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 5,  'mata_kuliah_id' => 19, 'dosen_id' => 6, 'id_kelas' => 3,  'tahun_akademik_id' => 20252, 'hari' => 'Jumat',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 6,  'mata_kuliah_id' => 4,  'dosen_id' => 7, 'id_kelas' => 4,  'tahun_akademik_id' => 20252, 'hari' => 'Senin',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 7,  'mata_kuliah_id' => 5,  'dosen_id' => 7, 'id_kelas' => 5,  'tahun_akademik_id' => 20252, 'hari' => 'Selasa', 'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 8,  'mata_kuliah_id' => 7,  'dosen_id' => 7, 'id_kelas' => 6,  'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 9,  'mata_kuliah_id' => 16, 'dosen_id' => 7, 'id_kelas' => 10, 'tahun_akademik_id' => 20252, 'hari' => 'Kamis',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 10, 'mata_kuliah_id' => 9,  'dosen_id' => 6, 'id_kelas' => 7,  'tahun_akademik_id' => 20252, 'hari' => 'Senin',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 11, 'mata_kuliah_id' => 10, 'dosen_id' => 6, 'id_kelas' => 9,  'tahun_akademik_id' => 20252, 'hari' => 'Selasa', 'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 12, 'mata_kuliah_id' => 12, 'dosen_id' => 6, 'id_kelas' => 11, 'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 13, 'mata_kuliah_id' => 13, 'dosen_id' => 6, 'id_kelas' => 12, 'tahun_akademik_id' => 20252, 'hari' => 'Kamis',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 14, 'mata_kuliah_id' => 14, 'dosen_id' => 6, 'id_kelas' => 13, 'tahun_akademik_id' => 20252, 'hari' => 'Jumat',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 15, 'mata_kuliah_id' => 6,  'dosen_id' => 7, 'id_kelas' => 4,  'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+        ]);
+    }
+}
