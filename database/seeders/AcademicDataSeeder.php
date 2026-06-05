@@ -58,22 +58,24 @@ class AcademicDataSeeder extends Seeder
 
     public function run(): void
     {
-        Schema::disableForeignKeyConstraints();
-
         $tables = [
             'nilais', 'k_h_s', 'mahasiswa_kelas', 'mahasiswa_kelas_mk',
             'jadwals', 'kelas', 'mata_kuliahs', 'prodis', 'jurusans', 'tahun_akademiks',
         ];
 
-        foreach ($tables as $table) {
-            DB::table($table)->delete();
-        }
+        Schema::disableForeignKeyConstraints();
 
-        if (DB::connection()->getDriverName() === 'sqlite') {
-            DB::statement("DELETE FROM sqlite_sequence WHERE name IN ('" . implode("','", $tables) . "')");
+        foreach ($tables as $table) {
+            DB::statement("DELETE FROM `{$table}`");
         }
 
         Schema::enableForeignKeyConstraints();
+
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            foreach ($tables as $table) {
+                DB::statement("DELETE FROM sqlite_sequence WHERE name = '{$table}'");
+            }
+        }
 
         $this->seedJurusans();
         $this->seedProdis();
@@ -86,15 +88,19 @@ class AcademicDataSeeder extends Seeder
 
     private function seedJurusans(): void
     {
-        DB::table('jurusans')->insert([
+        $rows = [
             ['id' => 1, 'nama_jurusan' => 'Administrasi Bisnis', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 2, 'nama_jurusan' => 'Teknik Elektro',        'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ];
+
+        foreach ($rows as $row) {
+            DB::table('jurusans')->updateOrInsert(['id' => $row['id']], $row);
+        }
     }
 
     private function seedProdis(): void
     {
-        DB::table('prodis')->insert([
+        $rows = [
             ['id' => 1, 'jurusan_id' => 1, 'nama_prodi' => 'D3 Administrasi Bisnis',                      'created_at' => now(), 'updated_at' => now()],
             ['id' => 2, 'jurusan_id' => 1, 'nama_prodi' => 'D4 Bisnis Digital',                            'created_at' => now(), 'updated_at' => now()],
             ['id' => 3, 'jurusan_id' => 2, 'nama_prodi' => 'D4 Teknologi Rekayasa Pembangkit Energi',      'created_at' => now(), 'updated_at' => now()],
@@ -104,20 +110,28 @@ class AcademicDataSeeder extends Seeder
             ['id' => 7, 'jurusan_id' => 2, 'nama_prodi' => 'D3 Teknik Informatika',                        'created_at' => now(), 'updated_at' => now()],
             ['id' => 8, 'jurusan_id' => 2, 'nama_prodi' => 'D3 Teknik Listrik',                            'created_at' => now(), 'updated_at' => now()],
             ['id' => 9, 'jurusan_id' => 1, 'nama_prodi' => 'D3 Sistem Informasi',                          'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ];
+
+        foreach ($rows as $row) {
+            DB::table('prodis')->updateOrInsert(['id' => $row['id']], $row);
+        }
     }
 
     private function seedTahunAkademik(): void
     {
-        DB::table('tahun_akademiks')->insert([
+        $rows = [
             ['id' => 20251, 'tahun_akademik' => '2025 ganjil', 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 20252, 'tahun_akademik' => '2025 genap',  'status' => 'aktif',    'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ];
+
+        foreach ($rows as $row) {
+            DB::table('tahun_akademiks')->updateOrInsert(['id' => $row['id']], $row);
+        }
     }
 
     private function seedMataKuliah(): void
     {
-        DB::table('mata_kuliahs')->insert([
+        $rows = [
             ['id_mk' => 1,  'prodi_id' => 7, 'nama_mk' => 'Algoritma dan Pemrograman',    'sks' => 4, 'semester' => 1, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
             ['id_mk' => 2,  'prodi_id' => 7, 'nama_mk' => 'Struktur Data',                 'sks' => 3, 'semester' => 3, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
             ['id_mk' => 3,  'prodi_id' => 7, 'nama_mk' => 'Basis Data',                    'sks' => 3, 'semester' => 4, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
@@ -138,12 +152,16 @@ class AcademicDataSeeder extends Seeder
             ['id_mk' => 18, 'prodi_id' => 1, 'nama_mk' => 'Kewirausahaan',                 'sks' => 2, 'semester' => 5, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
             ['id_mk' => 19, 'prodi_id' => 7, 'nama_mk' => 'Pemrograman Web',               'sks' => 3, 'semester' => 5, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
             ['id_mk' => 20, 'prodi_id' => 6, 'nama_mk' => 'Mikrokontroler',                'sks' => 3, 'semester' => 3, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ];
+
+        foreach ($rows as $row) {
+            DB::table('mata_kuliahs')->updateOrInsert(['id_mk' => $row['id_mk']], $row);
+        }
     }
 
     private function seedKelas(): void
     {
-        DB::table('kelas')->insert([
+        $rows = [
             ['id' => 1,  'tahun_akademik_id' => 20252, 'prodi_id' => 7, 'kode_kelas' => 'TI-2A',  'nama_kelas' => 'Teknik Informatika 2A',   'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 2,  'tahun_akademik_id' => 20252, 'prodi_id' => 7, 'kode_kelas' => 'TI-2B',  'nama_kelas' => 'Teknik Informatika 2B',   'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 3,  'tahun_akademik_id' => 20252, 'prodi_id' => 7, 'kode_kelas' => 'TI-4A',  'nama_kelas' => 'Teknik Informatika 4A',   'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
@@ -158,7 +176,11 @@ class AcademicDataSeeder extends Seeder
             ['id' => 12, 'tahun_akademik_id' => 20252, 'prodi_id' => 4, 'kode_kelas' => 'SIKC-4A','nama_kelas' => 'SI Kota Cerdas 4A',        'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 13, 'tahun_akademik_id' => 20252, 'prodi_id' => 5, 'kode_kelas' => 'TRO-4A', 'nama_kelas' => 'TR Otomasi 4A',            'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 14, 'tahun_akademik_id' => 20251, 'prodi_id' => 7, 'kode_kelas' => 'TI-6A',  'nama_kelas' => 'Teknik Informatika 6A',   'kapasitas_mahasiswa' => 30, 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ];
+
+        foreach ($rows as $row) {
+            DB::table('kelas')->updateOrInsert(['id' => $row['id']], $row);
+        }
     }
 
     private function seedMahasiswaDenganKelas(): void
@@ -184,13 +206,11 @@ class AcademicDataSeeder extends Seeder
                 $username = $this->makeUniqueUsername($baseUsername, $usedUsernames);
                 $usedUsernames[] = $username;
 
-                $nim = $config['prefix'] . str_pad($config['count'] > 99 ? $i + 1 : (string)($i + 1), $config['count'] > 99 ? 3 : 3, '0', STR_PAD_LEFT);
-                // Actually just pad to 3 digits always
                 $nim = $config['prefix'] . str_pad((string)($i + 1), 3, '0', STR_PAD_LEFT);
-
                 $email = strtolower($nim) . '@mahasiswa.ac.id';
 
                 $userData = [
+                    'id' => $userId,
                     'name' => $name,
                     'username' => $username,
                     'nomor_identitas' => $nim,
@@ -200,32 +220,26 @@ class AcademicDataSeeder extends Seeder
                     'status' => 'aktif',
                 ];
 
-                $existingUser = DB::table('users')->where('id', $userId)->first();
-
-                if ($existingUser) {
-                    DB::table('users')->where('id', $userId)->update(array_merge($userData, [
-                        'updated_at' => now(),
-                    ]));
-                } else {
-                    DB::table('users')->insert(array_merge($userData, [
-                        'id' => $userId,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]));
-                }
+                DB::table('users')->updateOrInsert(['id' => $userId], array_merge($userData, [
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]));
 
                 DB::table('role_user')->where('user_id', $userId)->delete();
                 DB::table('role_user')->insert(['user_id' => $userId, 'role_id' => 6]);
 
-                DB::table('mahasiswa_kelas')->insert([
-                    'mahasiswa_id' => $userId,
-                    'kelas_id' => $kelasId,
-                    'tahun_akademik_id' => $tahunAkademikId,
-                    'status' => 'aktif',
-                    'tanggal_daftar' => now(),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                DB::table('mahasiswa_kelas')->updateOrInsert(
+                    ['mahasiswa_id' => $userId, 'kelas_id' => $kelasId],
+                    [
+                        'mahasiswa_id' => $userId,
+                        'kelas_id' => $kelasId,
+                        'tahun_akademik_id' => $tahunAkademikId,
+                        'status' => 'aktif',
+                        'tanggal_daftar' => now(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]
+                );
 
                 if (isset($this->kelasMkMap[$kelasId])) {
                     $mkMap = $this->kelasMkMap[$kelasId];
@@ -244,7 +258,9 @@ class AcademicDataSeeder extends Seeder
             }
         }
 
-        $this->command?->info("Seeded {$totalCreated} mahasiswa across " . count($this->kelasConfig) . ' kelas.');
+        if ($this->command) {
+            $this->command->info("Seeded {$totalCreated} mahasiswa across " . count($this->kelasConfig) . ' kelas.');
+        }
     }
 
     private function makeUniqueUsername(string $base, array $used): string
@@ -263,7 +279,7 @@ class AcademicDataSeeder extends Seeder
 
     private function seedJadwals(): void
     {
-        DB::table('jadwals')->insert([
+        $rows = [
             ['id' => 1,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20252, 'hari' => 'Senin',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 2,  'mata_kuliah_id' => 2,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20252, 'hari' => 'Selasa', 'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 3,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 2,  'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
@@ -279,6 +295,10 @@ class AcademicDataSeeder extends Seeder
             ['id' => 13, 'mata_kuliah_id' => 13, 'dosen_id' => 6, 'id_kelas' => 12, 'tahun_akademik_id' => 20252, 'hari' => 'Kamis',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 14, 'mata_kuliah_id' => 14, 'dosen_id' => 6, 'id_kelas' => 13, 'tahun_akademik_id' => 20252, 'hari' => 'Jumat',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 15, 'mata_kuliah_id' => 6,  'dosen_id' => 7, 'id_kelas' => 4,  'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ];
+
+        foreach ($rows as $row) {
+            DB::table('jadwals')->updateOrInsert(['id' => $row['id']], $row);
+        }
     }
 }
