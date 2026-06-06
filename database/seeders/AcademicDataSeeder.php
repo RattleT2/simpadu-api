@@ -121,7 +121,9 @@ class AcademicDataSeeder extends Seeder
     {
         $rows = [
             ['id' => 20251, 'tahun_akademik' => '2025 ganjil', 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 20252, 'tahun_akademik' => '2025 genap',  'status' => 'aktif',    'created_at' => now(), 'updated_at' => now()],
+            ['id' => 20252, 'tahun_akademik' => '2025 genap',  'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 20261, 'tahun_akademik' => '2026 ganjil', 'status' => 'aktif',    'created_at' => now(), 'updated_at' => now()],
+            ['id' => 20262, 'tahun_akademik' => '2026 genap',  'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         foreach ($rows as $row) {
@@ -162,20 +164,20 @@ class AcademicDataSeeder extends Seeder
     private function seedKelas(): void
     {
         $rows = [
-            ['id' => 1,  'tahun_akademik_id' => 20252, 'prodi_id' => 7, 'kode_kelas' => 'TI-2A',  'nama_kelas' => 'Teknik Informatika 2A',   'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 2,  'tahun_akademik_id' => 20252, 'prodi_id' => 7, 'kode_kelas' => 'TI-2B',  'nama_kelas' => 'Teknik Informatika 2B',   'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 3,  'tahun_akademik_id' => 20252, 'prodi_id' => 7, 'kode_kelas' => 'TI-4A',  'nama_kelas' => 'Teknik Informatika 4A',   'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 4,  'tahun_akademik_id' => 20252, 'prodi_id' => 1, 'kode_kelas' => 'AB-2A',  'nama_kelas' => 'Administrasi Bisnis 2A',   'kapasitas_mahasiswa' => 45, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 5,  'tahun_akademik_id' => 20252, 'prodi_id' => 1, 'kode_kelas' => 'AB-2B',  'nama_kelas' => 'Administrasi Bisnis 2B',   'kapasitas_mahasiswa' => 45, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 6,  'tahun_akademik_id' => 20252, 'prodi_id' => 2, 'kode_kelas' => 'BD-2A',  'nama_kelas' => 'Bisnis Digital 2A',       'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 7,  'tahun_akademik_id' => 20252, 'prodi_id' => 6, 'kode_kelas' => 'EL-2A',  'nama_kelas' => 'Elektronika 2A',          'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 8,  'tahun_akademik_id' => 20252, 'prodi_id' => 6, 'kode_kelas' => 'EL-4A',  'nama_kelas' => 'Elektronika 4A',          'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 9,  'tahun_akademik_id' => 20252, 'prodi_id' => 8, 'kode_kelas' => 'TL-2A',  'nama_kelas' => 'Teknik Listrik 2A',       'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 10, 'tahun_akademik_id' => 20252, 'prodi_id' => 9, 'kode_kelas' => 'SI-2A',  'nama_kelas' => 'Sistem Informasi 2A',     'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 11, 'tahun_akademik_id' => 20252, 'prodi_id' => 3, 'kode_kelas' => 'TRPE-4A','nama_kelas' => 'TR Pembangkit Energi 4A',  'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 12, 'tahun_akademik_id' => 20252, 'prodi_id' => 4, 'kode_kelas' => 'SIKC-4A','nama_kelas' => 'SI Kota Cerdas 4A',        'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 13, 'tahun_akademik_id' => 20252, 'prodi_id' => 5, 'kode_kelas' => 'TRO-4A', 'nama_kelas' => 'TR Otomasi 4A',            'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 14, 'tahun_akademik_id' => 20251, 'prodi_id' => 7, 'kode_kelas' => 'TI-6A',  'nama_kelas' => 'Teknik Informatika 6A',   'kapasitas_mahasiswa' => 30, 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 1,  'tahun_akademik_id' => 20261, 'prodi_id' => 7, 'kode_kelas' => 'TI-2A',  'nama_kelas' => 'Teknik Informatika 2A',   'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2,  'tahun_akademik_id' => 20261, 'prodi_id' => 7, 'kode_kelas' => 'TI-2B',  'nama_kelas' => 'Teknik Informatika 2B',   'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3,  'tahun_akademik_id' => 20261, 'prodi_id' => 7, 'kode_kelas' => 'TI-4A',  'nama_kelas' => 'Teknik Informatika 4A',   'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4,  'tahun_akademik_id' => 20261, 'prodi_id' => 1, 'kode_kelas' => 'AB-2A',  'nama_kelas' => 'Administrasi Bisnis 2A',   'kapasitas_mahasiswa' => 45, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 5,  'tahun_akademik_id' => 20261, 'prodi_id' => 1, 'kode_kelas' => 'AB-2B',  'nama_kelas' => 'Administrasi Bisnis 2B',   'kapasitas_mahasiswa' => 45, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 6,  'tahun_akademik_id' => 20261, 'prodi_id' => 2, 'kode_kelas' => 'BD-2A',  'nama_kelas' => 'Bisnis Digital 2A',       'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 7,  'tahun_akademik_id' => 20261, 'prodi_id' => 6, 'kode_kelas' => 'EL-2A',  'nama_kelas' => 'Elektronika 2A',          'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 8,  'tahun_akademik_id' => 20261, 'prodi_id' => 6, 'kode_kelas' => 'EL-4A',  'nama_kelas' => 'Elektronika 4A',          'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 9,  'tahun_akademik_id' => 20261, 'prodi_id' => 8, 'kode_kelas' => 'TL-2A',  'nama_kelas' => 'Teknik Listrik 2A',       'kapasitas_mahasiswa' => 35, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 10, 'tahun_akademik_id' => 20261, 'prodi_id' => 9, 'kode_kelas' => 'SI-2A',  'nama_kelas' => 'Sistem Informasi 2A',     'kapasitas_mahasiswa' => 40, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 11, 'tahun_akademik_id' => 20261, 'prodi_id' => 3, 'kode_kelas' => 'TRPE-4A','nama_kelas' => 'TR Pembangkit Energi 4A',  'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 12, 'tahun_akademik_id' => 20261, 'prodi_id' => 4, 'kode_kelas' => 'SIKC-4A','nama_kelas' => 'SI Kota Cerdas 4A',        'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 13, 'tahun_akademik_id' => 20261, 'prodi_id' => 5, 'kode_kelas' => 'TRO-4A', 'nama_kelas' => 'TR Otomasi 4A',            'kapasitas_mahasiswa' => 30, 'status' => 'aktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 14, 'tahun_akademik_id' => 20262, 'prodi_id' => 7, 'kode_kelas' => 'TI-6A',  'nama_kelas' => 'Teknik Informatika 6A',   'kapasitas_mahasiswa' => 30, 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         foreach ($rows as $row) {
@@ -195,7 +197,7 @@ class AcademicDataSeeder extends Seeder
         $totalCreated = 0;
 
         foreach ($this->kelasConfig as $kelasId => $config) {
-            $tahunAkademikId = in_array($kelasId, [14]) ? 20251 : 20252;
+            $tahunAkademikId = in_array($kelasId, [14]) ? 20262 : 20261;
 
             for ($i = 0; $i < $config['count']; $i++, $userId++) {
                 $firstIndex = ($totalCreated + $i * 7) % count($depan);
@@ -280,21 +282,21 @@ class AcademicDataSeeder extends Seeder
     private function seedJadwals(): void
     {
         $rows = [
-            ['id' => 1,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20252, 'hari' => 'Senin',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 2,  'mata_kuliah_id' => 2,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20252, 'hari' => 'Selasa', 'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 3,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 2,  'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 4,  'mata_kuliah_id' => 3,  'dosen_id' => 6, 'id_kelas' => 3,  'tahun_akademik_id' => 20252, 'hari' => 'Kamis',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 5,  'mata_kuliah_id' => 19, 'dosen_id' => 6, 'id_kelas' => 3,  'tahun_akademik_id' => 20252, 'hari' => 'Jumat',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 6,  'mata_kuliah_id' => 4,  'dosen_id' => 7, 'id_kelas' => 4,  'tahun_akademik_id' => 20252, 'hari' => 'Senin',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 7,  'mata_kuliah_id' => 5,  'dosen_id' => 7, 'id_kelas' => 5,  'tahun_akademik_id' => 20252, 'hari' => 'Selasa', 'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 8,  'mata_kuliah_id' => 7,  'dosen_id' => 7, 'id_kelas' => 6,  'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 9,  'mata_kuliah_id' => 16, 'dosen_id' => 7, 'id_kelas' => 10, 'tahun_akademik_id' => 20252, 'hari' => 'Kamis',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 10, 'mata_kuliah_id' => 9,  'dosen_id' => 6, 'id_kelas' => 7,  'tahun_akademik_id' => 20252, 'hari' => 'Senin',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 11, 'mata_kuliah_id' => 10, 'dosen_id' => 6, 'id_kelas' => 9,  'tahun_akademik_id' => 20252, 'hari' => 'Selasa', 'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 12, 'mata_kuliah_id' => 12, 'dosen_id' => 6, 'id_kelas' => 11, 'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 13, 'mata_kuliah_id' => 13, 'dosen_id' => 6, 'id_kelas' => 12, 'tahun_akademik_id' => 20252, 'hari' => 'Kamis',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 14, 'mata_kuliah_id' => 14, 'dosen_id' => 6, 'id_kelas' => 13, 'tahun_akademik_id' => 20252, 'hari' => 'Jumat',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 15, 'mata_kuliah_id' => 6,  'dosen_id' => 7, 'id_kelas' => 4,  'tahun_akademik_id' => 20252, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 1,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20261, 'hari' => 'Senin',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2,  'mata_kuliah_id' => 2,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20261, 'hari' => 'Selasa', 'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 2,  'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4,  'mata_kuliah_id' => 3,  'dosen_id' => 6, 'id_kelas' => 3,  'tahun_akademik_id' => 20261, 'hari' => 'Kamis',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 5,  'mata_kuliah_id' => 19, 'dosen_id' => 6, 'id_kelas' => 3,  'tahun_akademik_id' => 20261, 'hari' => 'Jumat',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 6,  'mata_kuliah_id' => 4,  'dosen_id' => 7, 'id_kelas' => 4,  'tahun_akademik_id' => 20261, 'hari' => 'Senin',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 7,  'mata_kuliah_id' => 5,  'dosen_id' => 7, 'id_kelas' => 5,  'tahun_akademik_id' => 20261, 'hari' => 'Selasa', 'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 8,  'mata_kuliah_id' => 7,  'dosen_id' => 7, 'id_kelas' => 6,  'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 9,  'mata_kuliah_id' => 16, 'dosen_id' => 7, 'id_kelas' => 10, 'tahun_akademik_id' => 20261, 'hari' => 'Kamis',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 10, 'mata_kuliah_id' => 9,  'dosen_id' => 6, 'id_kelas' => 7,  'tahun_akademik_id' => 20261, 'hari' => 'Senin',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 11, 'mata_kuliah_id' => 10, 'dosen_id' => 6, 'id_kelas' => 9,  'tahun_akademik_id' => 20261, 'hari' => 'Selasa', 'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 12, 'mata_kuliah_id' => 12, 'dosen_id' => 6, 'id_kelas' => 11, 'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 13, 'mata_kuliah_id' => 13, 'dosen_id' => 6, 'id_kelas' => 12, 'tahun_akademik_id' => 20261, 'hari' => 'Kamis',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 14, 'mata_kuliah_id' => 14, 'dosen_id' => 6, 'id_kelas' => 13, 'tahun_akademik_id' => 20261, 'hari' => 'Jumat',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 15, 'mata_kuliah_id' => 6,  'dosen_id' => 7, 'id_kelas' => 4,  'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         foreach ($rows as $row) {
