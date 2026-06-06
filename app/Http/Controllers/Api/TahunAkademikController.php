@@ -39,6 +39,28 @@ class TahunAkademikController extends Controller
     }
 
     /**
+     * Mengubah data tahun akademik.
+     *
+     * @param TahunAkademikRequest $request
+     * @param mixed $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @bodyParam id int required Example: 20261
+     * @bodyParam tahun_akademik string required Example: 2026 ganjil
+     * @bodyParam status string required Example: aktif
+     */
+    public function update(TahunAkademikRequest $request, $id)
+    {
+        $tahunAkademik = TahunAkademik::findOrFail($id);
+        $tahunAkademik->update($request->validated());
+
+        return response()->json([
+            'message' => 'Tahun akademik updated successfully',
+            'data' => $tahunAkademik,
+        ]);
+    }
+
+    /**
      * Menampilkan hanya tahun akademik yang status-nya aktif.
      *
      * @return \Illuminate\Http\JsonResponse

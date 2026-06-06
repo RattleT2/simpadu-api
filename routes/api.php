@@ -46,6 +46,7 @@ Route::prefix('akademik')->group(function () {
         // Admin Akademik only (role_id = 2)
         Route::middleware('role:2')->group(function () {
             Route::post('tahun-akademik', [TahunAkademikController::class, 'store']);         // #6
+            Route::put('tahun-akademik/{id}', [TahunAkademikController::class, 'update']);    // #48
             Route::post('kelas', [KelasController::class, 'store']);                           // #10
             Route::put('kelas/{id_kelas}', [KelasController::class, 'update']);                // #11
 

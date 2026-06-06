@@ -2,7 +2,7 @@
 
 > **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
-> **Total Endpoint:** 47
+> **Total Endpoint:** 48
 
 ---
 
@@ -155,7 +155,7 @@ Reset password user. Password baru otomatis di-hash oleh Laravel.
 
 ## 🟠 ADMIN AKADEMIK (role_id: 2)
 
-> Admin Akademik memiliki akses terbanyak — **28 endpoint**.
+> Admin Akademik memiliki akses terbanyak — **29 endpoint**.
 
 ---
 
@@ -191,6 +191,23 @@ Menambahkan tahun akademik baru.
 Menampilkan hanya tahun akademik yang status-nya aktif.
 
 **Hak Akses:** Super Admin, Admin Akademik, Admin Keuangan
+
+---
+
+#### #48. PUT `/api/akademik/tahun-akademik/{id}`
+
+Mengubah data tahun akademik (misalnya mengubah status dari nonaktif ke aktif).
+
+**Hak Akses:** Admin Akademik
+
+**JSON Body:**
+```json
+{
+  "id": "20261",
+  "tahun_akademik": "2026 ganjil",
+  "status": "aktif"
+}
+```
 
 ---
 
@@ -980,6 +997,7 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 | 45 | GET `/api/akademik/users/me` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 46 | GET `/api/akademik/dosen/kelas` | - | - | ✅ | - | - | - | ✅ |
 | 47 | GET `/api/akademik/dosen` | ✅ | ✅ | - | ✅ | - | - | - |
+| 48 | PUT `/api/akademik/tahun-akademik/{id}` | ✅ | ✅ | - | - | - | - | - |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  
