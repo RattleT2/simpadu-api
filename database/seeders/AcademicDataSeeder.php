@@ -65,6 +65,9 @@ class AcademicDataSeeder extends Seeder
 
         Schema::disableForeignKeyConstraints();
 
+        DB::table('role_user')->where('user_id', '>=', 8)->delete();
+        DB::table('users')->where('id', '>=', 8)->delete();
+
         foreach ($tables as $table) {
             DB::statement("DELETE FROM `{$table}`");
         }
