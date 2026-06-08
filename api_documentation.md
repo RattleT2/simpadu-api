@@ -1070,5 +1070,29 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 | Admin Pegawai | admin.pegawai@simpadu.ac.id | admin123 |
 | Admin Mahasiswa | admin.mahasiswa@simpadu.ac.id | admin123 |
 | Admin Keuangan | admin.keuangan@simpadu.ac.id | admin123 |
-| Dosen TI | dosen.ti@simpadu.ac.id | admin123 |
-| Dosen Manajemen | dosen.manajemen@simpadu.ac.id | admin123 |
+| Dosen Algoritma (TI-2A) | ahmadfauzi@simpadu.ac.id | admin123 |
+| Dosen Struktur Data (TI-2A) | budisantoso@simpadu.ac.id | admin123 |
+| Dosen Algoritma (TI-2B) | citralestari@simpadu.ac.id | admin123 |
+| Dosen Pemrograman Web (TI-2B) | dimashermawan@simpadu.ac.id | admin123 |
+| Dosen Basis Data (TI-4A) | ekapermata@simpadu.ac.id | admin123 |
+| Dosen Pemrograman Web (TI-4A) | fajarsetiawan@simpadu.ac.id | admin123 |
+| Dosen Pengantar Bisnis (AB-2A) | gitapratama@simpadu.ac.id | admin123 |
+| Dosen Akuntansi Dasar (AB-2A) | hadigunawan@simpadu.ac.id | admin123 |
+| Dosen Manajemen (AB-2B) | indahmarlina@simpadu.ac.id | admin123 |
+| Dosen Kewirausahaan (AB-2B) | jokonugroho@simpadu.ac.id | admin123 |
+| Dosen Bisnis Digital (BD-2A) | kartikasari@simpadu.ac.id | admin123 |
+| Dosen E-Commerce (BD-2A) | lukmankurniawan@simpadu.ac.id | admin123 |
+| Dosen Elektronika Dasar (EL-2A) | megaramadhan@simpadu.ac.id | admin123 |
+| Dosen Mikrokontroler (EL-2A) | novianggraini@simpadu.ac.id | admin123 |
+| Dosen Elektronika Dasar (EL-4A) | rizkysaputra@simpadu.ac.id | admin123 |
+| Dosen Mikrokontroler (EL-4A) | putriwati@simpadu.ac.id | admin123 |
+| Dosen Rangkaian Listrik (TL-2A) | sitihidayat@simpadu.ac.id | admin123 |
+| Dosen Instalasi Listrik (TL-2A) | dewipurnama@simpadu.ac.id | admin123 |
+| Dosen SIM (SI-2A) | rinawijaya@simpadu.ac.id | admin123 |
+| Dosen Analisis Sistem (SI-2A) | hendrakusuma@simpadu.ac.id | admin123 |
+| Dosen Energi Terbarukan (TRPE-4A) | mayahalim@simpadu.ac.id | admin123 |
+| Dosen SI Kota (SIKC-4A) | dediputra@simpadu.ac.id | admin123 |
+| Dosen Sistem Kontrol (TRO-4A) | niasyahputra@simpadu.ac.id | admin123 |
+| Dosen Otomasi Industri (TRO-4A) | ferdynurhaliza@simpadu.ac.id | admin123 |
+| Dosen Basis Data (TI-6A) | sarasfauzi@simpadu.ac.id | admin123 |
+| Dosen Pemrograman Web (TI-6A) | antonsantoso@simpadu.ac.id | admin123 |

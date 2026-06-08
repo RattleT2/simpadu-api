@@ -40,20 +40,60 @@ class AcademicDataSeeder extends Seeder
     ];
 
     private array $kelasMkMap = [
-        1  => ['dosen_id' => 6, 'mks' => [1, 2]],
-        2  => ['dosen_id' => 6, 'mks' => [1, 19]],
-        3  => ['dosen_id' => 6, 'mks' => [3, 19]],
-        4  => ['dosen_id' => 7, 'mks' => [4, 6]],
-        5  => ['dosen_id' => 7, 'mks' => [5, 18]],
-        6  => ['dosen_id' => 7, 'mks' => [7, 8]],
-        7  => ['dosen_id' => 6, 'mks' => [9, 20]],
-        8  => ['dosen_id' => 6, 'mks' => [9, 20]],
-        9  => ['dosen_id' => 6, 'mks' => [10, 11]],
-        10 => ['dosen_id' => 7, 'mks' => [16, 17]],
-        11 => ['dosen_id' => 6, 'mks' => [12]],
-        12 => ['dosen_id' => 6, 'mks' => [13]],
-        13 => ['dosen_id' => 6, 'mks' => [14, 15]],
-        14 => ['dosen_id' => 6, 'mks' => [3, 19]],
+        1  => [
+            ['mk' => 1,  'dosen_id' => 6],
+            ['mk' => 2,  'dosen_id' => 7],
+        ],
+        2  => [
+            ['mk' => 1,  'dosen_id' => 8],
+            ['mk' => 19, 'dosen_id' => 9],
+        ],
+        3  => [
+            ['mk' => 3,  'dosen_id' => 10],
+            ['mk' => 19, 'dosen_id' => 11],
+        ],
+        4  => [
+            ['mk' => 4,  'dosen_id' => 12],
+            ['mk' => 6,  'dosen_id' => 13],
+        ],
+        5  => [
+            ['mk' => 5,  'dosen_id' => 14],
+            ['mk' => 18, 'dosen_id' => 15],
+        ],
+        6  => [
+            ['mk' => 7,  'dosen_id' => 16],
+            ['mk' => 8,  'dosen_id' => 17],
+        ],
+        7  => [
+            ['mk' => 9,  'dosen_id' => 18],
+            ['mk' => 20, 'dosen_id' => 19],
+        ],
+        8  => [
+            ['mk' => 9,  'dosen_id' => 20],
+            ['mk' => 20, 'dosen_id' => 21],
+        ],
+        9  => [
+            ['mk' => 10, 'dosen_id' => 22],
+            ['mk' => 11, 'dosen_id' => 23],
+        ],
+        10 => [
+            ['mk' => 16, 'dosen_id' => 24],
+            ['mk' => 17, 'dosen_id' => 25],
+        ],
+        11 => [
+            ['mk' => 12, 'dosen_id' => 26],
+        ],
+        12 => [
+            ['mk' => 13, 'dosen_id' => 27],
+        ],
+        13 => [
+            ['mk' => 14, 'dosen_id' => 28],
+            ['mk' => 15, 'dosen_id' => 29],
+        ],
+        14 => [
+            ['mk' => 3,  'dosen_id' => 30],
+            ['mk' => 19, 'dosen_id' => 31],
+        ],
     ];
 
     public function run(): void
@@ -247,11 +287,10 @@ class AcademicDataSeeder extends Seeder
                 );
 
                 if (isset($this->kelasMkMap[$kelasId])) {
-                    $mkMap = $this->kelasMkMap[$kelasId];
-                    foreach ($mkMap['mks'] as $mkId) {
+                    foreach ($this->kelasMkMap[$kelasId] as $entry) {
                         DB::table('mahasiswa_kelas_mk')->insert([
-                            'mata_kuliah_id' => $mkId,
-                            'dosen_id' => $mkMap['dosen_id'],
+                            'mata_kuliah_id' => $entry['mk'],
+                            'dosen_id' => $entry['dosen_id'],
                             'id_kelas' => $kelasId,
                             'nim' => $nim,
                             'status_id' => 'aktif',
@@ -285,21 +324,21 @@ class AcademicDataSeeder extends Seeder
     private function seedJadwals(): void
     {
         $rows = [
-            ['id' => 1,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20261, 'hari' => 'Senin',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 2,  'mata_kuliah_id' => 2,  'dosen_id' => 6, 'id_kelas' => 1,  'tahun_akademik_id' => 20261, 'hari' => 'Selasa', 'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 3,  'mata_kuliah_id' => 1,  'dosen_id' => 6, 'id_kelas' => 2,  'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 4,  'mata_kuliah_id' => 3,  'dosen_id' => 6, 'id_kelas' => 3,  'tahun_akademik_id' => 20261, 'hari' => 'Kamis',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 5,  'mata_kuliah_id' => 19, 'dosen_id' => 6, 'id_kelas' => 3,  'tahun_akademik_id' => 20261, 'hari' => 'Jumat',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 6,  'mata_kuliah_id' => 4,  'dosen_id' => 7, 'id_kelas' => 4,  'tahun_akademik_id' => 20261, 'hari' => 'Senin',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 7,  'mata_kuliah_id' => 5,  'dosen_id' => 7, 'id_kelas' => 5,  'tahun_akademik_id' => 20261, 'hari' => 'Selasa', 'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 8,  'mata_kuliah_id' => 7,  'dosen_id' => 7, 'id_kelas' => 6,  'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 9,  'mata_kuliah_id' => 16, 'dosen_id' => 7, 'id_kelas' => 10, 'tahun_akademik_id' => 20261, 'hari' => 'Kamis',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 10, 'mata_kuliah_id' => 9,  'dosen_id' => 6, 'id_kelas' => 7,  'tahun_akademik_id' => 20261, 'hari' => 'Senin',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 11, 'mata_kuliah_id' => 10, 'dosen_id' => 6, 'id_kelas' => 9,  'tahun_akademik_id' => 20261, 'hari' => 'Selasa', 'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 12, 'mata_kuliah_id' => 12, 'dosen_id' => 6, 'id_kelas' => 11, 'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 13, 'mata_kuliah_id' => 13, 'dosen_id' => 6, 'id_kelas' => 12, 'tahun_akademik_id' => 20261, 'hari' => 'Kamis',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 14, 'mata_kuliah_id' => 14, 'dosen_id' => 6, 'id_kelas' => 13, 'tahun_akademik_id' => 20261, 'hari' => 'Jumat',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 15, 'mata_kuliah_id' => 6,  'dosen_id' => 7, 'id_kelas' => 4,  'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 1,  'mata_kuliah_id' => 1,  'dosen_id' => 6,  'id_kelas' => 1,  'tahun_akademik_id' => 20261, 'hari' => 'Senin',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2,  'mata_kuliah_id' => 2,  'dosen_id' => 7,  'id_kelas' => 1,  'tahun_akademik_id' => 20261, 'hari' => 'Selasa', 'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3,  'mata_kuliah_id' => 1,  'dosen_id' => 8,  'id_kelas' => 2,  'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4,  'mata_kuliah_id' => 3,  'dosen_id' => 10, 'id_kelas' => 3,  'tahun_akademik_id' => 20261, 'hari' => 'Kamis',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 5,  'mata_kuliah_id' => 19, 'dosen_id' => 11, 'id_kelas' => 3,  'tahun_akademik_id' => 20261, 'hari' => 'Jumat',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 6,  'mata_kuliah_id' => 4,  'dosen_id' => 12, 'id_kelas' => 4,  'tahun_akademik_id' => 20261, 'hari' => 'Senin',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 7,  'mata_kuliah_id' => 5,  'dosen_id' => 14, 'id_kelas' => 5,  'tahun_akademik_id' => 20261, 'hari' => 'Selasa', 'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 8,  'mata_kuliah_id' => 7,  'dosen_id' => 16, 'id_kelas' => 6,  'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 9,  'mata_kuliah_id' => 16, 'dosen_id' => 24, 'id_kelas' => 10, 'tahun_akademik_id' => 20261, 'hari' => 'Kamis',  'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 10, 'mata_kuliah_id' => 9,  'dosen_id' => 18, 'id_kelas' => 7,  'tahun_akademik_id' => 20261, 'hari' => 'Senin',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 11, 'mata_kuliah_id' => 10, 'dosen_id' => 22, 'id_kelas' => 9,  'tahun_akademik_id' => 20261, 'hari' => 'Selasa', 'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 12, 'mata_kuliah_id' => 12, 'dosen_id' => 26, 'id_kelas' => 11, 'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 13, 'mata_kuliah_id' => 13, 'dosen_id' => 27, 'id_kelas' => 12, 'tahun_akademik_id' => 20261, 'hari' => 'Kamis',  'jam_mulai' => '10:00', 'jam_selesai' => '12:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 14, 'mata_kuliah_id' => 14, 'dosen_id' => 28, 'id_kelas' => 13, 'tahun_akademik_id' => 20261, 'hari' => 'Jumat',  'jam_mulai' => '13:00', 'jam_selesai' => '15:00', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 15, 'mata_kuliah_id' => 6,  'dosen_id' => 13, 'id_kelas' => 4,  'tahun_akademik_id' => 20261, 'hari' => 'Rabu',   'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         foreach ($rows as $row) {
