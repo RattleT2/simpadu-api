@@ -2,7 +2,7 @@
 
 > **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
-> **Total Endpoint:** 48
+> **Total Endpoint:** 49
 
 ---
 
@@ -155,7 +155,7 @@ Reset password user. Password baru otomatis di-hash oleh Laravel.
 
 ## 🟠 ADMIN AKADEMIK (role_id: 2)
 
-> Admin Akademik memiliki akses terbanyak — **29 endpoint**.
+> Admin Akademik memiliki akses terbanyak — **30 endpoint**.
 
 ---
 
@@ -215,7 +215,7 @@ Mengubah data tahun akademik (misalnya mengubah status dari nonaktif ke aktif).
 
 #### #7. GET `/api/akademik/kelas`
 
-Menampilkan seluruh data kelas.
+Menampilkan seluruh data kelas. Response menyertakan `kapasitas_mahasiswa` dan `jumlah_mahasiswa` (jumlah mahasiswa yang terdaftar di kelas tersebut).
 
 **Hak Akses:** Semua admin (kecuali Mahasiswa)
 
@@ -223,7 +223,7 @@ Menampilkan seluruh data kelas.
 
 #### #8. GET `/api/akademik/kelas/{id_kelas}`
 
-Menampilkan detail satu kelas.
+Menampilkan detail satu kelas. Response menyertakan `kapasitas_mahasiswa` dan `jumlah_mahasiswa`.
 
 **Hak Akses:** Semua admin (kecuali Mahasiswa)
 
@@ -265,6 +265,59 @@ Mengubah data kelas.
 **Hak Akses:** Admin Akademik
 
 **JSON Body:** _(Sama seperti POST kelas)_
+
+---
+
+#### #49. GET `/api/akademik/dosen/beban-mengajar`
+
+Menampilkan beban mengajar seluruh dosen. Data dikelompokkan per dosen → mata kuliah → kelas, disertai prodi, SKS, periode (tahun akademik), dan jumlah mahasiswa.
+
+**Hak Akses:** Admin Akademik
+
+**Contoh Response:**
+```json
+[
+  {
+    "dosen": {
+      "id": 8,
+      "name": "Dr. Andi Wijaya",
+      "username": "andi.wijaya",
+      "nomor_identitas": "DSN001",
+      "email": "andi@simpadu.ac.id",
+      "role_id": 7,
+      "status": "aktif"
+    },
+    "mata_kuliah": [
+      {
+        "id_mk": 5,
+        "nama_mk": "Pemrograman Web Backend",
+        "sks": 3,
+        "prodi": {
+          "id": 3,
+          "jurusan_id": 2,
+          "nama_prodi": "D3 Teknik Informatika"
+        },
+        "kelas": {
+          "id": 1,
+          "tahun_akademik_id": 20252,
+          "prodi_id": 3,
+          "kode_kelas": "TI-2A",
+          "nama_kelas": "Teknik Informatika 2A",
+          "kapasitas_mahasiswa": 40,
+          "status": "aktif",
+          "keterangan": null
+        },
+        "tahun_akademik": {
+          "id": 20252,
+          "tahun_akademik": "2025 genap",
+          "status": "aktif"
+        },
+        "jumlah_mahasiswa": 35
+      }
+    ]
+  }
+]
+```
 
 ---
 
@@ -637,6 +690,7 @@ Menampilkan daftar kelas yang diajar oleh dosen/pegawai yang sedang login (berda
     "kode_kelas": "TI-2A",
     "nama_kelas": "Teknik Informatika 2A",
     "kapasitas_mahasiswa": 40,
+    "jumlah_mahasiswa": 20,
     "status": "aktif",
     "keterangan": null,
     "prodi": {
@@ -926,6 +980,7 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
     "kode_kelas": "TI-2A",
     "nama_kelas": "Teknik Informatika 2A",
     "kapasitas_mahasiswa": 40,
+    "jumlah_mahasiswa": 20,
     "status": "aktif",
     "keterangan": null,
     "prodi": {
@@ -998,6 +1053,7 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 | 46 | GET `/api/akademik/dosen/kelas` | - | - | ✅ | - | - | - | ✅ |
 | 47 | GET `/api/akademik/dosen` | ✅ | ✅ | - | ✅ | - | - | - |
 | 48 | PUT `/api/akademik/tahun-akademik/{id}` | ✅ | ✅ | - | - | - | - | - |
+| 49 | GET `/api/akademik/dosen/beban-mengajar` | ✅ | ✅ | - | - | - | - | - |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  

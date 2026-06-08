@@ -50,6 +50,8 @@ Route::prefix('akademik')->group(function () {
             Route::post('kelas', [KelasController::class, 'store']);                           // #10
             Route::put('kelas/{id_kelas}', [KelasController::class, 'update']);                // #11
 
+            Route::get('dosen/beban-mengajar', [KelasController::class, 'bebanMengajar']);      // #49
+
             Route::post('jurusan', [JurusanController::class, 'store']);                       // #18
             Route::get('jurusan/{jurusan_id}/prodis', [ProdiController::class, 'byJurusan']);  // #19
             Route::post('prodis', [ProdiController::class, 'store']);                          // #20

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\KelasRequest;
 use App\Models\Kelas;
 use App\Models\MahasiswaKelasMk;
+use Illuminate\Support\Facades\DB;
 
 class KelasController extends Controller
 {
@@ -16,7 +17,11 @@ class KelasController extends Controller
      */
     public function index()
     {
-        $kelas = Kelas::with(['prodi', 'tahunAkademik'])->get();
+        $kelas = Kelas::with(['prodi', 'tahunAkademik'])
+            ->withCount(['mahasiswaKelasMk as jumlah_mahasiswa' => function ($query) {
+                $query->select(DB::raw('count(distinct nim)'));
+            }])
+            ->get();
 
         return response()->json($kelas);
     }
@@ -30,6 +35,9 @@ class KelasController extends Controller
     public function show($id_kelas)
     {
         $kelas = Kelas::with(['prodi', 'tahunAkademik'])->findOrFail($id_kelas);
+        $kelas->loadCount(['mahasiswaKelasMk as jumlah_mahasiswa' => function ($query) {
+            $query->select(DB::raw('count(distinct nim)'));
+        }]);
 
         return response()->json($kelas);
     }
@@ -95,7 +103,10 @@ class KelasController extends Controller
 
         return response()->json([
             'message' => 'Kelas updated successfully',
-            'data' => $kelas->load(['prodi', 'tahunAkademik']),
+            'data' => $kelas->load(['prodi', 'tahunAkademik'])
+                ->loadCount(['mahasiswaKelasMk as jumlah_mahasiswa' => function ($query) {
+                    $query->select(DB::raw('count(distinct nim)'));
+                }]),
         ]);
     }
 
@@ -114,8 +125,52 @@ class KelasController extends Controller
 
         $kelas = Kelas::with(['prodi', 'tahunAkademik'])
             ->whereIn('id', $kelasIds)
+            ->withCount(['mahasiswaKelasMk as jumlah_mahasiswa' => function ($query) {
+                $query->select(DB::raw('count(distinct nim)'));
+            }])
             ->get();
 
         return response()->json($kelas);
+    }
+
+    public function bebanMengajar()
+    {
+        $data = MahasiswaKelasMk::select(
+                'dosen_id',
+                'mata_kuliah_id',
+                'id_kelas',
+                DB::raw('count(distinct nim) as jumlah_mahasiswa')
+            )
+            ->with([
+                'dosen',
+                'mataKuliah.prodi',
+                'kelas.prodi',
+                'kelas.tahunAkademik',
+            ])
+            ->groupBy('dosen_id', 'mata_kuliah_id', 'id_kelas')
+            ->get()
+            ->groupBy('dosen_id')
+            ->map(function ($items) {
+                $dosen = $items->first()->dosen;
+
+                $mataKuliah = $items->map(function ($item) {
+                    return [
+                        'id_mk' => $item->mata_kuliah_id,
+                        'nama_mk' => $item->mataKuliah->nama_mk,
+                        'sks' => $item->mataKuliah->sks,
+                        'prodi' => $item->mataKuliah->prodi,
+                        'kelas' => $item->kelas,
+                        'tahun_akademik' => $item->kelas->tahunAkademik,
+                        'jumlah_mahasiswa' => $item->jumlah_mahasiswa,
+                    ];
+                })->values();
+
+                return [
+                    'dosen' => $dosen,
+                    'mata_kuliah' => $mataKuliah,
+                ];
+            })->values();
+
+        return response()->json($data);
     }
 }
