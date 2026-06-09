@@ -328,12 +328,12 @@ class AcademicDataSeeder extends Seeder
 
     private function makeUniqueUsername(string $base, array $used): string
     {
-        if (!in_array($base, $used, true)) {
+        if (!in_array($base, $used, true) && !DB::table('users')->where('username', $base)->exists()) {
             return $base;
         }
 
         $suffix = 2;
-        while (in_array($base . $suffix, $used, true)) {
+        while (in_array($base . $suffix, $used, true) || DB::table('users')->where('username', $base . $suffix)->exists()) {
             $suffix++;
         }
 
