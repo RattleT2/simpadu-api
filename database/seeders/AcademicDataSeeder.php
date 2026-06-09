@@ -23,20 +23,37 @@ class AcademicDataSeeder extends Seeder
     ];
 
     private array $kelasConfig = [
-        1  => ['prefix' => 'TI2A',  'count' => 20],
-        2  => ['prefix' => 'TI2B',  'count' => 20],
-        3  => ['prefix' => 'TI4A',  'count' => 15],
-        4  => ['prefix' => 'AB2A',  'count' => 20],
-        5  => ['prefix' => 'AB2B',  'count' => 15],
-        6  => ['prefix' => 'BD2A',  'count' => 15],
-        7  => ['prefix' => 'EL2A',  'count' => 20],
-        8  => ['prefix' => 'EL4A',  'count' => 10],
-        9  => ['prefix' => 'TL2A',  'count' => 15],
-        10 => ['prefix' => 'SI2A',  'count' => 15],
-        11 => ['prefix' => 'TRPE',  'count' => 10],
-        12 => ['prefix' => 'SIKC',  'count' => 10],
-        13 => ['prefix' => 'TRO4',  'count' => 10],
-        14 => ['prefix' => 'TI6A',  'count' => 10],
+        1  => ['count' => 20],
+        2  => ['count' => 20],
+        3  => ['count' => 15],
+        4  => ['count' => 20],
+        5  => ['count' => 15],
+        6  => ['count' => 15],
+        7  => ['count' => 20],
+        8  => ['count' => 10],
+        9  => ['count' => 15],
+        10 => ['count' => 15],
+        11 => ['count' => 10],
+        12 => ['count' => 10],
+        13 => ['count' => 10],
+        14 => ['count' => 10],
+    ];
+
+    private array $kelasProdiMap = [
+        1  => ['prodi_id' => 7, 'jurusan' => 'C'],
+        2  => ['prodi_id' => 7, 'jurusan' => 'C'],
+        3  => ['prodi_id' => 7, 'jurusan' => 'C'],
+        4  => ['prodi_id' => 1, 'jurusan' => 'A'],
+        5  => ['prodi_id' => 1, 'jurusan' => 'A'],
+        6  => ['prodi_id' => 2, 'jurusan' => 'A'],
+        7  => ['prodi_id' => 6, 'jurusan' => 'C'],
+        8  => ['prodi_id' => 6, 'jurusan' => 'C'],
+        9  => ['prodi_id' => 8, 'jurusan' => 'C'],
+        10 => ['prodi_id' => 9, 'jurusan' => 'A'],
+        11 => ['prodi_id' => 3, 'jurusan' => 'C'],
+        12 => ['prodi_id' => 4, 'jurusan' => 'C'],
+        13 => ['prodi_id' => 5, 'jurusan' => 'C'],
+        14 => ['prodi_id' => 7, 'jurusan' => 'C'],
     ];
 
     private array $kelasMkMap = [
@@ -257,9 +274,19 @@ class AcademicDataSeeder extends Seeder
         $usedUsernames = [];
         $userId = 32;
         $totalCreated = 0;
+        $prodiCounters = [];
 
         foreach ($this->kelasConfig as $kelasId => $config) {
             $tahunAkademikId = in_array($kelasId, [14]) ? 20262 : 20261;
+            $prodiInfo = $this->kelasProdiMap[$kelasId];
+            $jurusanPrefix = $prodiInfo['jurusan'];
+            $kodeProdi = str_pad((string)$prodiInfo['prodi_id'], 3, '0', STR_PAD_LEFT);
+            $tahun = substr((string)$tahunAkademikId, -2);
+
+            $prodiKey = $prodiInfo['prodi_id'];
+            if (!isset($prodiCounters[$prodiKey])) {
+                $prodiCounters[$prodiKey] = 0;
+            }
 
             for ($i = 0; $i < $config['count']; $i++, $userId++) {
                 $firstIndex = ($totalCreated + $i * 7) % count($depan);
@@ -270,7 +297,9 @@ class AcademicDataSeeder extends Seeder
                 $username = $this->makeUniqueUsername($baseUsername, $usedUsernames);
                 $usedUsernames[] = $username;
 
-                $nim = $config['prefix'] . str_pad((string)($i + 1), 3, '0', STR_PAD_LEFT);
+                $prodiCounters[$prodiKey]++;
+                $urutan = str_pad((string)$prodiCounters[$prodiKey], 4, '0', STR_PAD_LEFT);
+                $nim = $jurusanPrefix . $kodeProdi . $tahun . $urutan;
                 $email = strtolower($nim) . '@mahasiswa.ac.id';
 
                 $userData = [
