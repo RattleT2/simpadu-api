@@ -110,6 +110,7 @@ Route::prefix('akademik')->group(function () {
 
         // Admin Pegawai only (3) - CRUD jadwal
         Route::middleware('role:3')->group(function () {
+            Route::post('dosen/register', [UserController::class, 'registerDosen']);               // #50
             Route::post('jadwal', [JadwalController::class, 'store']);                          // #40
             Route::put('jadwal/{id}', [JadwalController::class, 'update']);                     // #41
             Route::delete('jadwal/{id}', [JadwalController::class, 'destroy']);                  // #42

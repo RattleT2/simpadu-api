@@ -146,6 +146,25 @@ class UserController extends Controller
         ], 201);
     }
 
+    public function registerDosen(MahasiswaRegisterRequest $request)
+    {
+        $data = $request->validated();
+        $data['role_id'] = 7;
+        $data['status'] = 'aktif';
+
+        $user = User::create($data);
+
+        DB::table('role_user')->insert([
+            ['user_id' => $user->id, 'role_id' => 7],
+            ['user_id' => $user->id, 'role_id' => 8],
+        ]);
+
+        return response()->json([
+            'message' => 'Dosen created successfully',
+            'user' => $user->load('roles'),
+        ], 201);
+    }
+
     /**
      * Menampilkan list seluruh mahasiswa (role_id = 6).
      *

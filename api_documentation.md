@@ -2,7 +2,7 @@
 
 > **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
-> **Total Endpoint:** 49
+> **Total Endpoint:** 50
 
 ---
 
@@ -707,7 +707,44 @@ Menampilkan daftar kelas yang diajar oleh dosen/pegawai yang sedang login (berda
 ]
 ```
 
-**Total: 13 endpoint**
+#### #50. POST `/api/akademik/dosen/register`
+
+Membuat akun dosen baru. `role_id` otomatis 7, `status` otomatis `aktif`, dan otomatis mendapat role 8 (`pegawai`).
+
+**Hak Akses:** Admin Pegawai
+
+**JSON Body:**
+```json
+{
+  "name": "Ahmad Fauzi",
+  "username": "ahmadfauzi",
+  "nomor_identitas": "DSN032",
+  "email": "ahmadfauzi@simpadu.ac.id",
+  "password": "password123"
+}
+```
+
+**Contoh Response:**
+```json
+{
+  "message": "Dosen created successfully",
+  "user": {
+    "id": 32,
+    "name": "Ahmad Fauzi",
+    "username": "ahmadfauzi",
+    "nomor_identitas": "DSN032",
+    "email": "ahmadfauzi@simpadu.ac.id",
+    "role_id": 7,
+    "status": "aktif",
+    "roles": [
+      { "id_role": 7, "nama_role": "dosen" },
+      { "id_role": 8, "nama_role": "pegawai" }
+    ]
+  }
+}
+```
+
+**Total: 14 endpoint**
 
 ---
 
@@ -1054,6 +1091,7 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 | 47 | GET `/api/akademik/dosen` | ✅ | ✅ | - | ✅ | - | - | - |
 | 48 | PUT `/api/akademik/tahun-akademik/{id}` | ✅ | ✅ | - | - | - | - | - |
 | 49 | GET `/api/akademik/dosen/beban-mengajar` | ✅ | ✅ | - | - | - | - | - |
+| 50 | POST `/api/akademik/dosen/register` | - | - | ✅ | - | - | - | - |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  
