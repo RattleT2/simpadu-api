@@ -100,7 +100,7 @@ class AcademicDataSeeder extends Seeder
     {
         $tables = [
             'nilais', 'k_h_s', 'mahasiswa_kelas', 'mahasiswa_kelas_mk',
-            'jadwals', 'kelas', 'mata_kuliahs', 'prodis', 'jurusans', 'tahun_akademiks',
+            'jadwals', 'semesters', 'kelas', 'mata_kuliahs', 'prodis', 'jurusans', 'tahun_akademiks',
         ];
 
         Schema::disableForeignKeyConstraints();
@@ -123,6 +123,7 @@ class AcademicDataSeeder extends Seeder
         $this->seedJurusans();
         $this->seedProdis();
         $this->seedTahunAkademik();
+        $this->seedSemesters();
         $this->seedMataKuliah();
         $this->seedKelas();
         $this->seedMahasiswaDenganKelas();
@@ -163,6 +164,8 @@ class AcademicDataSeeder extends Seeder
     private function seedTahunAkademik(): void
     {
         $rows = [
+            ['id' => 20241, 'tahun_akademik' => '2024 ganjil', 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 20242, 'tahun_akademik' => '2024 genap',  'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 20251, 'tahun_akademik' => '2025 ganjil', 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 20252, 'tahun_akademik' => '2025 genap',  'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 20261, 'tahun_akademik' => '2026 ganjil', 'status' => 'aktif',    'created_at' => now(), 'updated_at' => now()],
@@ -171,6 +174,22 @@ class AcademicDataSeeder extends Seeder
 
         foreach ($rows as $row) {
             DB::table('tahun_akademiks')->updateOrInsert(['id' => $row['id']], $row);
+        }
+    }
+
+    private function seedSemesters(): void
+    {
+        $rows = [
+            ['id' => 1,  'tahun_akademik_id' => 20241, 'nomor_semester' => 1, 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2,  'tahun_akademik_id' => 20242, 'nomor_semester' => 2, 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3,  'tahun_akademik_id' => 20251, 'nomor_semester' => 3, 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4,  'tahun_akademik_id' => 20252, 'nomor_semester' => 4, 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 5,  'tahun_akademik_id' => 20261, 'nomor_semester' => 5, 'status' => 'aktif',   'created_at' => now(), 'updated_at' => now()],
+            ['id' => 6,  'tahun_akademik_id' => 20262, 'nomor_semester' => 6, 'status' => 'nonaktif', 'created_at' => now(), 'updated_at' => now()],
+        ];
+
+        foreach ($rows as $row) {
+            DB::table('semesters')->updateOrInsert(['id' => $row['id']], $row);
         }
     }
 

@@ -2,7 +2,7 @@
 
 > **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
-> **Total Endpoint:** 50
+> **Total Endpoint:** 54
 
 ---
 
@@ -155,7 +155,7 @@ Reset password user. Password baru otomatis di-hash oleh Laravel.
 
 ## 🟠 ADMIN AKADEMIK (role_id: 2)
 
-> Admin Akademik memiliki akses terbanyak — **30 endpoint**.
+> Admin Akademik memiliki akses terbanyak — **34 endpoint**.
 
 ---
 
@@ -208,6 +208,70 @@ Mengubah data tahun akademik (misalnya mengubah status dari nonaktif ke aktif).
   "status": "aktif"
 }
 ```
+
+---
+
+### 📋 Semester
+
+#### #51. GET `/api/akademik/semester`
+
+Menampilkan seluruh data semester beserta relasi tahun akademik.
+
+**Hak Akses:** Semua admin + Mahasiswa
+
+**Contoh Response:**
+```json
+[
+  {
+    "id": 5,
+    "tahun_akademik_id": 20261,
+    "nomor_semester": 5,
+    "status": "aktif",
+    "tahun_akademik": {
+      "id": 20261,
+      "tahun_akademik": "2026 ganjil",
+      "status": "aktif"
+    }
+  }
+]
+```
+
+---
+
+#### #52. POST `/api/akademik/semester`
+
+Menambahkan semester baru.
+
+**Hak Akses:** Admin Akademik
+
+**JSON Body:**
+```json
+{
+  "tahun_akademik_id": 20271,
+  "nomor_semester": 7,
+  "status": "nonaktif"
+}
+```
+
+> **Validasi:** `nomor_semester` harus 1–8, kombinasi (`tahun_akademik_id`, `nomor_semester`) harus unik.
+
+---
+
+#### #53. PUT `/api/akademik/semester/{id}`
+
+Mengubah data semester.
+
+**Hak Akses:** Admin Akademik
+
+**JSON Body:** _(Sama seperti POST semester)_
+
+---
+
+#### #54. GET `/api/akademik/semester/aktif`
+
+Menampilkan hanya semester yang status-nya aktif.
+
+**Hak Akses:** Super Admin, Admin Akademik, Admin Mahasiswa, Admin Keuangan, Mahasiswa
 
 ---
 
@@ -744,7 +808,10 @@ Membuat akun dosen baru. `role_id` otomatis 7, `status` otomatis `aktif`, dan ot
 }
 ```
 
-**Total: 14 endpoint**
+#### #51. GET `/api/akademik/semester`
+Menampilkan seluruh data semester.
+
+**Total: 15 endpoint**
 
 ---
 
@@ -858,7 +925,13 @@ Menampilkan kabupaten dalam satu provinsi.
 
 **Hak Akses:** Super Admin, Admin Mahasiswa
 
-**Total: 21 endpoint**
+#### #51. GET `/api/akademik/semester`
+Menampilkan seluruh data semester.
+
+#### #54. GET `/api/akademik/semester/aktif`
+Menampilkan hanya semester yang status-nya aktif.
+
+**Total: 23 endpoint**
 
 ---
 
@@ -905,7 +978,13 @@ Menampilkan hanya tahun akademik yang status-nya aktif.
 
 **Hak Akses:** Super Admin, Admin Akademik, Admin Keuangan
 
-**Total: 7 endpoint**
+#### #51. GET `/api/akademik/semester`
+Menampilkan seluruh data semester.
+
+#### #54. GET `/api/akademik/semester/aktif`
+Menampilkan hanya semester yang status-nya aktif.
+
+**Total: 9 endpoint**
 
 ---
 
@@ -956,7 +1035,13 @@ Menampilkan kabupaten dalam satu provinsi.
 #### #45. GET `/api/akademik/users/me`
 Menampilkan profil user yang sedang login (termasuk status).
 
-**Total: 15 endpoint**
+#### #51. GET `/api/akademik/semester`
+Menampilkan seluruh data semester.
+
+#### #54. GET `/api/akademik/semester/aktif`
+Menampilkan hanya semester yang status-nya aktif.
+
+**Total: 17 endpoint**
 
 ---
 
@@ -1034,7 +1119,10 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 ]
 ```
 
-**Total: 14 endpoint**
+#### #51. GET `/api/akademik/semester`
+Menampilkan seluruh data semester.
+
+**Total: 15 endpoint**
 
 ---
 
@@ -1092,6 +1180,10 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 | 48 | PUT `/api/akademik/tahun-akademik/{id}` | ✅ | ✅ | - | - | - | - | - |
 | 49 | GET `/api/akademik/dosen/beban-mengajar` | ✅ | ✅ | - | - | - | - | - |
 | 50 | POST `/api/akademik/dosen/register` | - | - | ✅ | - | - | - | - |
+| 51 | GET `/api/akademik/semester` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 52 | POST `/api/akademik/semester` | ✅ | ✅ | - | - | - | - | - |
+| 53 | PUT `/api/akademik/semester/{id}` | ✅ | ✅ | - | - | - | - | - |
+| 54 | GET `/api/akademik/semester/aktif` | ✅ | ✅ | - | ✅ | ✅ | ✅ | - |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\MahasiswaKelasMkController;
 use App\Http\Controllers\Api\MataKuliahController;
 use App\Http\Controllers\Api\NilaiController;
 use App\Http\Controllers\Api\ProdiController;
+use App\Http\Controllers\Api\SemesterController;
 use App\Http\Controllers\Api\TahunAkademikController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WilayahController;
@@ -33,6 +34,7 @@ Route::prefix('akademik')->group(function () {
         // Admin + Mahasiswa (1,2,3,4,5,6,7)
         Route::middleware('role:1,2,3,4,5,6,7')->group(function () {
             Route::get('tahun-akademik', [TahunAkademikController::class, 'index']);   // #5
+            Route::get('semester', [SemesterController::class, 'index']);                // #51
             Route::get('kelas', [KelasController::class, 'index']);                     // #7
             Route::get('kelas/{id_kelas}', [KelasController::class, 'show']);           // #8
         });
@@ -47,6 +49,8 @@ Route::prefix('akademik')->group(function () {
         Route::middleware('role:2')->group(function () {
             Route::post('tahun-akademik', [TahunAkademikController::class, 'store']);         // #6
             Route::put('tahun-akademik/{id}', [TahunAkademikController::class, 'update']);    // #48
+            Route::post('semester', [SemesterController::class, 'store']);                     // #52
+            Route::put('semester/{id}', [SemesterController::class, 'update']);                // #53
             Route::post('kelas', [KelasController::class, 'store']);                           // #10
             Route::put('kelas/{id_kelas}', [KelasController::class, 'update']);                // #11
 
@@ -70,6 +74,7 @@ Route::prefix('akademik')->group(function () {
             Route::get('users/mahasiswa/{nim}', [UserController::class, 'showByNim']);              // #30
             Route::get('prodis', [ProdiController::class, 'index']);                                // #31
             Route::get('tahun-akademik/aktif', [TahunAkademikController::class, 'aktif']);          // #32
+            Route::get('semester/aktif', [SemesterController::class, 'aktif']);                      // #54
         });
 
         // Super Admin + Admin Mahasiswa + Mahasiswa (1,4,6)
