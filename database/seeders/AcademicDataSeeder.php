@@ -105,8 +105,8 @@ class AcademicDataSeeder extends Seeder
 
         Schema::disableForeignKeyConstraints();
 
-        DB::table('role_user')->where('user_id', '>=', 8)->delete();
-        DB::table('users')->where('id', '>=', 8)->delete();
+        DB::table('role_user')->where('user_id', '>=', 32)->delete();
+        DB::table('users')->where('id', '>=', 32)->delete();
 
         foreach ($tables as $table) {
             DB::statement("DELETE FROM `{$table}`");
@@ -255,7 +255,7 @@ class AcademicDataSeeder extends Seeder
         shuffle($belakang);
 
         $usedUsernames = [];
-        $userId = 8;
+        $userId = 32;
         $totalCreated = 0;
 
         foreach ($this->kelasConfig as $kelasId => $config) {
