@@ -308,7 +308,7 @@ class DosenKelasSeeder extends Seeder
             unset($userData['extra_roles']);
 
             $user = User::updateOrCreate(
-                ['id' => $userData['id']],
+                ['username' => $userData['username']],
                 $userData
             );
 
