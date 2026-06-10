@@ -121,12 +121,15 @@ Mengubah data user. Semua field opsional — hanya field yang dikirim yang di-up
   "nomor_identitas": "C00013",
   "email": "budi@mahasiswa.simpadu.ac.id",
   "role_id": 2,
+  "prodi_id": 3,
+  "semester_id": 1,
   "password": "newpassword123",
   "status": "nonaktif"
 }
 ```
 
 > **Sync Pivot:** Saat `role_id` diubah, pivot `role_user` otomatis di-sync ulang — role 8 ditambahkan jika role baru adalah 2,3,4,5, atau 7.
+> **`prodi_id` & `semester_id`:** Opsional, nullable. Hanya relevan untuk mahasiswa (role_id = 6).
 
 ---
 
@@ -849,9 +852,25 @@ Menampilkan seluruh data plotting mahasiswa.
 
 #### #26. GET `/api/akademik/mahasiswa-kelas/{id}`
 Menampilkan detail plotting.
-
 #### #30. GET `/api/akademik/users/mahasiswa/{nim}`
+
 Menampilkan data mahasiswa + prodi + semester_sekarang.
+
+**Contoh Response:**
+```json
+{
+  "id": 15,
+  "name": "Budi Setiawan",
+  "nomor_identitas": "C00002",
+  "email": "budi@mahasiswa.simpadu.ac.id",
+  "prodi_id": 3,
+  "nama_prodi": "D3 Teknik Informatika",
+  "semester_id": 1,
+  "semester_sekarang": 3
+}
+```
+
+> `prodi_id` dan `semester_id` berasal dari kolom di tabel `users` yang diisi saat registrasi mahasiswa. `semester_sekarang` adalah `nomor_semester` dari relasi `semester`.
 
 #### #31. GET `/api/akademik/prodis`
 Menampilkan seluruh Prodi dengan relasi Jurusan.
@@ -864,6 +883,7 @@ Menampilkan tahun akademik yang status-nya aktif.
 #### #33. POST `/api/akademik/mahasiswa/register`
 
 Membuat akun mahasiswa baru. `role_id` otomatis 6, `status` default `aktif`.
+Mahasiswa langsung ditempatkan ke semester dan program studi yang dipilih.
 
 **Hak Akses:** Super Admin, Admin Mahasiswa
 
@@ -874,17 +894,94 @@ Membuat akun mahasiswa baru. `role_id` otomatis 6, `status` default `aktif`.
   "username": "budi setiawan",
   "nomor_identitas": "C00013",
   "email": "budisetiawan@mahasiswa.simpadu.ac.id",
-  "password": "password123"
+  "password": "password123",
+  "prodi_id": 3,
+  "semester_id": 1
 }
 ```
+
+**Contoh Response:**
+```json
+{
+  "message": "Mahasiswa created successfully",
+  "user": {
+    "id": 16,
+    "name": "budi Setiawan antonio",
+    "username": "budi setiawan",
+    "nomor_identitas": "C00013",
+    "email": "budisetiawan@mahasiswa.simpadu.ac.id",
+    "role_id": 6,
+    "prodi_id": 3,
+    "semester_id": 1,
+    "status": "aktif",
+    "roles": [
+      { "id_role": 6, "nama_role": "mahasiswa" }
+    ],
+    "prodi": {
+      "id": 3,
+      "jurusan_id": 2,
+      "nama_prodi": "D3 Teknik Informatika",
+      "jurusan": {
+        "id": 2,
+        "nama_jurusan": "Elektro"
+      }
+    },
+    "semester": {
+      "id": 1,
+      "tahun_akademik_id": 20241,
+      "nomor_semester": 3,
+      "status": "nonaktif",
+      "tahun_akademik": {
+        "id": 20241,
+        "tahun_akademik": "2024 ganjil",
+        "status": "nonaktif"
+      }
+    }
+  }
+}
+```
+
+> **Validasi:** `prodi_id` harus ada di tabel `prodis`. `semester_id` harus ada di tabel `semesters`.
+> Prodi dan semester bisa diambil dari `GET /api/akademik/prodis` dan `GET /api/akademik/semester`.
 
 ---
 
 #### #34. GET `/api/akademik/mahasiswa`
 
-Menampilkan list seluruh mahasiswa (role_id = 6).
+Menampilkan list seluruh mahasiswa (role_id = 6) beserta prodi dan semester-nya.
 
 **Hak Akses:** Super Admin, Admin Akademik, Admin Mahasiswa
+
+**Contoh Response:**
+```json
+[
+  {
+    "id": 15,
+    "name": "Budi Setiawan",
+    "username": "budisetiawan",
+    "nomor_identitas": "C00002",
+    "email": "budi@mahasiswa.simpadu.ac.id",
+    "role_id": 6,
+    "prodi_id": 3,
+    "semester_id": 1,
+    "status": "aktif",
+    "roles": [
+      { "id_role": 6, "nama_role": "mahasiswa" }
+    ],
+    "prodi": {
+      "id": 3,
+      "jurusan_id": 2,
+      "nama_prodi": "D3 Teknik Informatika"
+    },
+    "semester": {
+      "id": 1,
+      "tahun_akademik_id": 20241,
+      "nomor_semester": 3,
+      "status": "nonaktif"
+    }
+  }
+]
+```
 
 ---
 
@@ -1193,6 +1290,8 @@ Menampilkan seluruh data semester.
 
 ## Kredensial Test (Seeder)
 
+> **Password Admin & Dosen:** Semua akun admin (role 1–5) dan dosen (role 7) menggunakan password **`admin123`**.
+
 | Role | Email | Password |
 |------|-------|----------|
 | Super Admin | superadmin@simpadu.ac.id | admin123 |
@@ -1226,3 +1325,11 @@ Menampilkan seluruh data semester.
 | Dosen Otomasi Industri (TRO-4A) | ferdynurhaliza@simpadu.ac.id | admin123 |
 | Dosen Basis Data (TI-6A) | sarasfauzi@simpadu.ac.id | admin123 |
 | Dosen Pemrograman Web (TI-6A) | antonsantoso@simpadu.ac.id | admin123 |
+
+> **Password Mahasiswa:** Semua akun mahasiswa (role 6) hasil seeder menggunakan password **`mahasiswa123`**.
+> Format email mahasiswa: `{awalan_jurusan}{kode_prodi}{tahun}{urutan}@mahasiswa.ac.id` (contoh: `c00720240001@mahasiswa.ac.id`).
+> Untuk melihat daftar mahasiswa, gunakan `GET /api/akademik/mahasiswa`.
+
+| Role | Email (contoh) | Password |
+|------|-------|----------|
+| Mahasiswa TI-2A | c00720240001@mahasiswa.ac.id | mahasiswa123 |

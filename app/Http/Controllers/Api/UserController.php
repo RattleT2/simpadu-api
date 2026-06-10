@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DosenRegisterRequest;
 use App\Http\Requests\MahasiswaRegisterRequest;
 use App\Http\Requests\MahasiswaStatusRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\KHS;
-use App\Models\MahasiswaKelasMk;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -87,25 +86,16 @@ class UserController extends Controller
      */
     public function showByNim($nim)
     {
-        $user = User::where('nomor_identitas', $nim)
+        $user = User::with('prodi', 'semester')
+            ->where('nomor_identitas', $nim)
             ->where('role_id', 6)
             ->firstOrFail();
 
-        $prodiId = null;
-        $namaProdi = null;
+        $prodiId = $user->prodi_id;
+        $namaProdi = $user->prodi ? $user->prodi->nama_prodi : null;
 
-        $plotting = MahasiswaKelasMk::with('kelas.prodi')
-            ->where('nim', $nim)
-            ->latest('id_mahasiswa_mk')
-            ->first();
-
-        if ($plotting && $plotting->kelas && $plotting->kelas->prodi) {
-            $prodiId = $plotting->kelas->prodi->id;
-            $namaProdi = $plotting->kelas->prodi->nama_prodi;
-        }
-
-        $semesterSekarang = KHS::where('user_id', $user->id)
-            ->max('semester_mahasiswa');
+        $semesterAktif = $user->semester;
+        $semesterSekarang = $semesterAktif ? $semesterAktif->nomor_semester : null;
 
         return response()->json([
             'id' => $user->id,
@@ -114,12 +104,14 @@ class UserController extends Controller
             'email' => $user->email,
             'prodi_id' => $prodiId,
             'nama_prodi' => $namaProdi,
+            'semester_id' => $semesterAktif ? $semesterAktif->id : null,
             'semester_sekarang' => $semesterSekarang,
         ]);
     }
 
     /**
      * Membuat akun mahasiswa baru (role_id otomatis 6, status default aktif).
+     * Mahasiswa langsung ditempatkan ke semester dan program studi yang dipilih.
      *
      * @param MahasiswaRegisterRequest $request
      * @return \Illuminate\Http\JsonResponse
@@ -129,6 +121,8 @@ class UserController extends Controller
      * @bodyParam nomor_identitas string nullable Example: C00013
      * @bodyParam email string required Example: budisetiawan@mahasiswa.simpadu.ac.id
      * @bodyParam password string required Example: password123
+     * @bodyParam prodi_id int required Example: 3
+     * @bodyParam semester_id int required Example: 1
      */
     public function registerMahasiswa(MahasiswaRegisterRequest $request)
     {
@@ -142,11 +136,11 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Mahasiswa created successfully',
-            'user' => $user->load('roles'),
+            'user' => $user->load('roles', 'prodi.jurusan', 'semester.tahunAkademik'),
         ], 201);
     }
 
-    public function registerDosen(MahasiswaRegisterRequest $request)
+    public function registerDosen(DosenRegisterRequest $request)
     {
         $data = $request->validated();
         $data['role_id'] = 7;
@@ -172,7 +166,7 @@ class UserController extends Controller
      */
     public function mahasiswa()
     {
-        $users = User::where('role_id', 6)->with('roles')->get();
+        $users = User::where('role_id', 6)->with('roles', 'prodi', 'semester')->get();
 
         return response()->json($users);
     }
