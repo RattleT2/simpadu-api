@@ -23,20 +23,20 @@ class AcademicDataSeeder extends Seeder
     ];
 
     private array $kelasConfig = [
-        1  => ['count' => 20],
-        2  => ['count' => 20],
-        3  => ['count' => 15],
-        4  => ['count' => 20],
-        5  => ['count' => 15],
-        6  => ['count' => 15],
-        7  => ['count' => 20],
-        8  => ['count' => 10],
-        9  => ['count' => 15],
-        10 => ['count' => 15],
-        11 => ['count' => 10],
-        12 => ['count' => 10],
-        13 => ['count' => 10],
-        14 => ['count' => 10],
+        1  => ['count' => 20, 'nomor_semester' => 2],
+        2  => ['count' => 20, 'nomor_semester' => 2],
+        3  => ['count' => 15, 'nomor_semester' => 4],
+        4  => ['count' => 20, 'nomor_semester' => 2],
+        5  => ['count' => 15, 'nomor_semester' => 2],
+        6  => ['count' => 15, 'nomor_semester' => 2],
+        7  => ['count' => 20, 'nomor_semester' => 2],
+        8  => ['count' => 10, 'nomor_semester' => 4],
+        9  => ['count' => 15, 'nomor_semester' => 2],
+        10 => ['count' => 15, 'nomor_semester' => 2],
+        11 => ['count' => 10, 'nomor_semester' => 4],
+        12 => ['count' => 10, 'nomor_semester' => 4],
+        13 => ['count' => 10, 'nomor_semester' => 4],
+        14 => ['count' => 10, 'nomor_semester' => 6],
     ];
 
     private array $kelasProdiMap = [
@@ -278,6 +278,9 @@ class AcademicDataSeeder extends Seeder
 
         foreach ($this->kelasConfig as $kelasId => $config) {
             $tahunAkademikId = in_array($kelasId, [14]) ? 20262 : 20261;
+            $semesterId = DB::table('semesters')
+                ->where('nomor_semester', $config['nomor_semester'])
+                ->value('id');
             $prodiInfo = $this->kelasProdiMap[$kelasId];
             $jurusanPrefix = $prodiInfo['jurusan'];
             $kodeProdi = str_pad((string)$prodiInfo['prodi_id'], 3, '0', STR_PAD_LEFT);
@@ -310,6 +313,8 @@ class AcademicDataSeeder extends Seeder
                     'email' => $email,
                     'password' => bcrypt('mahasiswa123'),
                     'role_id' => 6,
+                    'prodi_id' => $prodiInfo['prodi_id'],
+                    'semester_id' => $semesterId,
                     'status' => 'aktif',
                 ];
 
