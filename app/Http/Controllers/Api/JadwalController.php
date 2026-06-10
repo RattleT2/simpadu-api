@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BatchPresensiRequest;
 use App\Http\Requests\JadwalRequest;
 use App\Models\Jadwal;
 use App\Models\MahasiswaKelasMk;
@@ -119,5 +120,32 @@ class JadwalController extends Controller
         $jadwal->delete();
 
         return response()->json(['message' => 'Jadwal deleted successfully']);
+    }
+
+    /**
+     * Batch update presensi untuk satu pertemuan pada satu jadwal.
+     *
+     * @bodyParam pertemuan_ke int required Example: 1
+     * @bodyParam presensi array required Array of { id_mahasiswa_mk, status }
+     */
+    public function batchPresensi(BatchPresensiRequest $request, $jadwalId, $pertemuanKe)
+    {
+        $jadwal = Jadwal::findOrFail($jadwalId);
+
+        $col = 'p' . $pertemuanKe;
+
+        $updated = 0;
+        foreach ($request->presensi as $item) {
+            $affected = MahasiswaKelasMk::where('id_mahasiswa_mk', $item['id_mahasiswa_mk'])
+                ->where('mata_kuliah_id', $jadwal->mata_kuliah_id)
+                ->where('id_kelas', $jadwal->id_kelas)
+                ->update([$col => $item['status']]);
+            $updated += $affected;
+        }
+
+        return response()->json([
+            'message' => 'Presensi updated successfully',
+            'updated' => $updated,
+        ]);
     }
 }

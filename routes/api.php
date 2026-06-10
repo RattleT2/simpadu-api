@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\KelasController;
 use App\Http\Controllers\Api\KHSController;
 use App\Http\Controllers\Api\MahasiswaKelasMkController;
 use App\Http\Controllers\Api\MataKuliahController;
+use App\Http\Controllers\Api\MateriController;
 use App\Http\Controllers\Api\NilaiController;
 use App\Http\Controllers\Api\ProdiController;
 use App\Http\Controllers\Api\SemesterController;
@@ -119,6 +120,18 @@ Route::prefix('akademik')->group(function () {
             Route::post('jadwal', [JadwalController::class, 'store']);                          // #40
             Route::put('jadwal/{id}', [JadwalController::class, 'update']);                     // #41
             Route::delete('jadwal/{id}', [JadwalController::class, 'destroy']);                  // #42
+        });
+
+        // Super Admin + Admin Akademik + Admin Pegawai + Dosen (1,2,3,7) — Materi & Batch Presensi
+        Route::middleware('role:1,2,3,7')->group(function () {
+            Route::get('jadwal/{jadwalId}/materi', [MateriController::class, 'index']);              // #55
+            Route::get('jadwal/{jadwalId}/materi/{pertemuanKe}', [MateriController::class, 'show']); // #56
+            Route::put('jadwal/{jadwalId}/materi/{pertemuanKe}', [MateriController::class, 'update']); // #57
+            Route::post('jadwal/{jadwalId}/materi/{pertemuanKe}/upload', [MateriController::class, 'upload']); // #58
+            Route::delete('jadwal/{jadwalId}/materi/{pertemuanKe}/file', [MateriController::class, 'deleteFile']); // #59
+            Route::get('materi/download/{id}', [MateriController::class, 'download']);              // #60
+
+            Route::post('jadwal/{jadwalId}/pertemuan/{pertemuanKe}/presensi', [JadwalController::class, 'batchPresensi']); // #61
         });
 
         // Mahasiswa sendiri + Admin Akademik + Admin Mahasiswa (2,4,6) - self-access check di controller

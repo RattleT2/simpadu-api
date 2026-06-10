@@ -2,7 +2,7 @@
 
 > **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
-> **Total Endpoint:** 54
+> **Total Endpoint:** 61
 
 ---
 
@@ -158,7 +158,7 @@ Reset password user. Password baru otomatis di-hash oleh Laravel.
 
 ## 🟠 ADMIN AKADEMIK (role_id: 2)
 
-> Admin Akademik memiliki akses terbanyak — **34 endpoint**.
+> Admin Akademik memiliki akses terbanyak — **41 endpoint**.
 
 ---
 
@@ -814,7 +814,28 @@ Membuat akun dosen baru. `role_id` otomatis 7, `status` otomatis `aktif`, dan ot
 #### #51. GET `/api/akademik/semester`
 Menampilkan seluruh data semester.
 
-**Total: 15 endpoint**
+#### #55. GET `/api/akademik/jadwal/{jadwalId}/materi`
+Menampilkan seluruh materi pertemuan.
+
+#### #56. GET `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}`
+Menampilkan detail satu materi.
+
+#### #57. PUT `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}`
+Simpan/update topik & deskripsi materi.
+
+#### #58. POST `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}/upload`
+Upload file materi.
+
+#### #59. DELETE `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}/file`
+Hapus file materi.
+
+#### #60. GET `/api/akademik/materi/download/{id}`
+Download file materi.
+
+#### #61. POST `/api/akademik/jadwal/{jadwalId}/pertemuan/{pertemuanKe}/presensi`
+Batch update presensi semua mahasiswa.
+
+**Total: 22 endpoint**
 
 ---
 
@@ -1085,6 +1106,149 @@ Menampilkan hanya semester yang status-nya aktif.
 
 ---
 
+## 📚 MATERI PERTEMUAN & BATCH PRESENSI
+
+> Endpoint untuk mengelola materi perkuliahan (topik, deskripsi, upload file) dan presensi massal per pertemuan.
+> Dosen hanya dapat mengakses jadwal miliknya sendiri (dicek via `dosen_id`).
+
+**Hak Akses:** Super Admin (1), Admin Akademik (2), Admin Pegawai (3), Dosen (7)
+
+---
+
+### #55. GET `/api/akademik/jadwal/{jadwalId}/materi`
+
+Menampilkan seluruh materi dari satu jadwal (16 pertemuan).
+
+**Contoh Response:**
+```json
+[
+  {
+    "id": 1,
+    "jadwal_id": 1,
+    "pertemuan_ke": 1,
+    "topik_materi": "Pengenalan Algoritma",
+    "deskripsi": "Membahas dasar-dasar algoritma dan flowchart",
+    "file_path": "materi/slides_pertemuan1.pdf",
+    "file_name": "slides_pertemuan1.pdf",
+    "file_type": "pdf",
+    "created_at": "2026-06-10T08:00:00.000000Z",
+    "updated_at": "2026-06-10T08:00:00.000000Z"
+  }
+]
+```
+
+---
+
+### #56. GET `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}`
+
+Menampilkan detail satu pertemuan. Jika materi belum pernah disimpan, response tetap dikembalikan dengan nilai `null`.
+
+**Contoh Response:**
+```json
+{
+  "id": 1,
+  "jadwal_id": 1,
+  "pertemuan_ke": 1,
+  "topik_materi": "Pengenalan Algoritma",
+  "deskripsi": "Membahas dasar-dasar algoritma dan flowchart",
+  "file_path": "materi/slides_pertemuan1.pdf",
+  "file_name": "slides_pertemuan1.pdf",
+  "file_type": "pdf"
+}
+```
+
+---
+
+### #57. PUT `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}`
+
+Menyimpan / mengupdate topik dan deskripsi materi untuk satu pertemuan.
+
+**JSON Body:**
+```json
+{
+  "topik_materi": "Pengenalan Algoritma",
+  "deskripsi": "Membahas dasar-dasar algoritma, pseudocode, dan flowchart"
+}
+```
+
+> Gunakan `updateOrCreate` — jika data belum ada, dibuat baru; jika sudah ada, di-update.
+
+---
+
+### #58. POST `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}/upload`
+
+Upload file materi (PDF, DOCX, PPT, XLSX) untuk satu pertemuan. File lama akan otomatis dihapus jika ada upload baru.
+
+**Request:** `multipart/form-data`
+
+| Field | Tipe | Keterangan |
+|-------|------|------------|
+| `file` | File | Wajib. Max 10MB. Format: `pdf, doc, docx, ppt, pptx, xls, xlsx` |
+
+**Contoh Response:**
+```json
+{
+  "message": "File uploaded successfully",
+  "data": {
+    "id": 1,
+    "jadwal_id": 1,
+    "pertemuan_ke": 1,
+    "topik_materi": "Pengenalan Algoritma",
+    "deskripsi": null,
+    "file_path": "materi/j8k2l3m4n5_slides_pertemuan1.pdf",
+    "file_name": "slides_pertemuan1.pdf",
+    "file_type": "pdf"
+  }
+}
+```
+
+---
+
+### #59. DELETE `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}/file`
+
+Menghapus file yang sudah diupload untuk satu pertemuan. Hanya menghapus file, data topik & deskripsi tetap dipertahankan.
+
+---
+
+### #60. GET `/api/akademik/materi/download/{id}`
+
+Download file materi berdasarkan `id` dari tabel `materi_pertemuan`. Return file binary dengan header `Content-Disposition: attachment`.
+
+> **Public:** Endpoint ini dapat diakses oleh semua role yang sudah login (via middleware `jwt.auth`).
+
+---
+
+### #61. POST `/api/akademik/jadwal/{jadwalId}/pertemuan/{pertemuanKe}/presensi`
+
+Batch update presensi untuk satu pertemuan — mengisi absensi semua mahasiswa sekaligus.
+
+**Hak Akses:** Super Admin (1), Admin Akademik (2), Admin Pegawai (3), Dosen (7)
+
+**JSON Body:**
+```json
+{
+  "presensi": [
+    { "id_mahasiswa_mk": 1, "status": "H" },
+    { "id_mahasiswa_mk": 2, "status": "I" },
+    { "id_mahasiswa_mk": 3, "status": "A" },
+    { "id_mahasiswa_mk": 4, "status": "H" }
+  ]
+}
+```
+
+> **Validasi:** `status` harus salah satu dari: `H` (Hadir), `I` (Izin), `S` (Sakit), `A` (Alpa).
+> `id_mahasiswa_mk` harus ada di tabel `mahasiswa_kelas_mk` dan sesuai dengan `mata_kuliah_id` + `id_kelas` dari jadwal.
+
+**Contoh Response:**
+```json
+{
+  "message": "Presensi updated successfully",
+  "updated": 4
+}
+```
+
+---
+
 ## 🔵 MAHASISWA (role_id: 6)
 
 #### #5. GET `/api/akademik/tahun-akademik`
@@ -1219,7 +1383,28 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
 #### #51. GET `/api/akademik/semester`
 Menampilkan seluruh data semester.
 
-**Total: 15 endpoint**
+#### #55. GET `/api/akademik/jadwal/{jadwalId}/materi`
+Menampilkan seluruh materi (16 pertemuan).
+
+#### #56. GET `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}`
+Menampilkan detail satu materi pertemuan.
+
+#### #57. PUT `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}`
+Simpan/update topik & deskripsi materi.
+
+#### #58. POST `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}/upload`
+Upload file materi (PDF, DOCX, PPT, dll). Max 10MB.
+
+#### #59. DELETE `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}/file`
+Hapus file materi yang sudah diupload.
+
+#### #60. GET `/api/akademik/materi/download/{id}`
+Download file materi.
+
+#### #61. POST `/api/akademik/jadwal/{jadwalId}/pertemuan/{pertemuanKe}/presensi`
+Batch update presensi untuk satu pertemuan — semua mahasiswa sekaligus.
+
+**Total: 22 endpoint**
 
 ---
 
@@ -1281,6 +1466,13 @@ Menampilkan seluruh data semester.
 | 52 | POST `/api/akademik/semester` | ✅ | ✅ | - | - | - | - | - |
 | 53 | PUT `/api/akademik/semester/{id}` | ✅ | ✅ | - | - | - | - | - |
 | 54 | GET `/api/akademik/semester/aktif` | ✅ | ✅ | - | ✅ | ✅ | ✅ | - |
+| 55 | GET `/api/akademik/jadwal/{jadwalId}/materi` | ✅ | ✅ | ✅ | - | - | - | ✅ |
+| 56 | GET `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}` | ✅ | ✅ | ✅ | - | - | - | ✅ |
+| 57 | PUT `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}` | ✅ | ✅ | ✅ | - | - | - | ✅ |
+| 58 | POST `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}/upload` | ✅ | ✅ | ✅ | - | - | - | ✅ |
+| 59 | DELETE `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}/file` | ✅ | ✅ | ✅ | - | - | - | ✅ |
+| 60 | GET `/api/akademik/materi/download/{id}` | ✅ | ✅ | ✅ | - | - | - | ✅ |
+| 61 | POST `/api/akademik/jadwal/{jadwalId}/pertemuan/{pertemuanKe}/presensi` | ✅ | ✅ | ✅ | - | - | - | ✅ |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  
