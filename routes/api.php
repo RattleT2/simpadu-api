@@ -29,6 +29,10 @@ Route::prefix('akademik')->group(function () {
         Route::middleware('role:1')->group(function () {
             Route::get('users', [UserController::class, 'index']);                     // #1
             Route::post('register', [AuthController::class, 'register']);               // #2
+        });
+
+        // Semua Admin (1,2,3,4,5) — self-access check di controller
+        Route::middleware('role:1,2,3,4,5')->group(function () {
             Route::put('users/{id_user}', [UserController::class, 'updateUser']);       // #3
         });
 

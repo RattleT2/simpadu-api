@@ -111,9 +111,14 @@ Membuat akun (semua role).
 
 Mengubah data user. Semua field opsional — hanya field yang dikirim yang di-update.
 
-**Hak Akses:** Super Admin
+**Hak Akses:** Semua Admin (Super Admin, Admin Akademik, Admin Pegawai, Admin Mahasiswa, Admin Keuangan)
 
-**JSON Body:**
+| Role | Update Siapa | role_id & status |
+|------|-------------|------------------|
+| Super Admin (1) | Semua user | ✅ Bisa |
+| Admin 2,3,4,5 | Hanya diri sendiri | ❌ Tidak bisa |
+
+**JSON Body (Super Admin):**
 ```json
 {
   "name": "Budi Setiawan",
@@ -128,7 +133,17 @@ Mengubah data user. Semua field opsional — hanya field yang dikirim yang di-up
 }
 ```
 
-> **Sync Pivot:** Saat `role_id` diubah, pivot `role_user` otomatis di-sync ulang — role 8 ditambahkan jika role baru adalah 2,3,4,5, atau 7.
+**JSON Body (Admin non-Super Admin — hanya diri sendiri):**
+```json
+{
+  "name": "Nama Baru",
+  "username": "usernamebaru",
+  "email": "emailbaru@simpadu.ac.id",
+  "password": "passwordbaru"
+}
+```
+
+> **Sync Pivot:** Saat `role_id` diubah oleh Super Admin, pivot `role_user` otomatis di-sync ulang — role 8 ditambahkan jika role baru adalah 2,3,4,5, atau 7.
 > **`prodi_id` & `semester_id`:** Opsional, nullable. Hanya relevan untuk mahasiswa (role_id = 6).
 
 ---
@@ -158,7 +173,10 @@ Reset password user. Password baru otomatis di-hash oleh Laravel.
 
 ## 🟠 ADMIN AKADEMIK (role_id: 2)
 
-> Admin Akademik memiliki akses terbanyak — **41 endpoint**.
+> Admin Akademik memiliki akses terbanyak — **42 endpoint**.
+
+#### #3. PUT `/api/akademik/users/{id_user}`
+Mengubah data akun sendiri. 🔒 Self-access.
 
 ---
 
@@ -708,6 +726,9 @@ Menampilkan list seluruh dosen pengajar yang berstatus aktif (role_id = 7, statu
 
 ## 🟡 ADMIN PEGAWAI (role_id: 3)
 
+#### #3. PUT `/api/akademik/users/{id_user}`
+Mengubah data akun sendiri. 🔒 Self-access.
+
 #### #5. GET `/api/akademik/tahun-akademik`
 Menampilkan seluruh data tahun akademik.
 
@@ -835,11 +856,14 @@ Download file materi.
 #### #61. POST `/api/akademik/jadwal/{jadwalId}/pertemuan/{pertemuanKe}/presensi`
 Batch update presensi semua mahasiswa.
 
-**Total: 22 endpoint**
+**Total: 23 endpoint**
 
 ---
 
 ## 🟤 ADMIN MAHASISWA (role_id: 4)
+
+#### #3. PUT `/api/akademik/users/{id_user}`
+Mengubah data akun sendiri. 🔒 Self-access.
 
 #### #5. GET `/api/akademik/tahun-akademik`
 Menampilkan seluruh data tahun akademik.
@@ -1049,11 +1073,14 @@ Menampilkan seluruh data semester.
 #### #54. GET `/api/akademik/semester/aktif`
 Menampilkan hanya semester yang status-nya aktif.
 
-**Total: 23 endpoint**
+**Total: 24 endpoint**
 
 ---
 
 ## 🟢 ADMIN KEUANGAN (role_id: 5)
+
+#### #3. PUT `/api/akademik/users/{id_user}`
+Mengubah data akun sendiri. 🔒 Self-access.
 
 #### #5. GET `/api/akademik/tahun-akademik`
 Menampilkan seluruh data tahun akademik.
@@ -1102,7 +1129,7 @@ Menampilkan seluruh data semester.
 #### #54. GET `/api/akademik/semester/aktif`
 Menampilkan hanya semester yang status-nya aktif.
 
-**Total: 9 endpoint**
+**Total: 10 endpoint**
 
 ---
 
@@ -1414,7 +1441,7 @@ Batch update presensi untuk satu pertemuan — semua mahasiswa sekaligus.
 |---|----------|---|---|---|---|---|---|---|   
 | 1 | GET `/api/akademik/users` | ✅ | - | - | - | - | - | - |
 | 2 | POST `/api/akademik/register` | ✅ | - | - | - | - | - | - |
-| 3 | PUT `/api/akademik/users/{id_user}` | ✅ | - | - | - | - | - | - |
+| 3 | PUT `/api/akademik/users/{id_user}` | ✅ | 🔒 | 🔒 | 🔒 | 🔒 | - | - |
 | 4 | POST `/api/akademik/login` | 🌐 | 🌐 | 🌐 | 🌐 | 🌐 | 🌐 | 🌐 |
 | 5 | GET `/api/akademik/tahun-akademik` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 6 | POST `/api/akademik/tahun-akademik` | ✅ | ✅ | - | - | - | - | - |

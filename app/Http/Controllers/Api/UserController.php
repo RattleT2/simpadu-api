@@ -42,6 +42,9 @@ class UserController extends Controller
      * Mengubah data user (name, username, nomor_identitas, email, role_id, password, status).
      * Semua field bersifat opsional — hanya field yang dikirim yang akan di-update.
      *
+     * Super Admin (1) → bisa update semua user, termasuk ganti role_id & status.
+     * Admin lain (2,3,4,5) → hanya bisa update akun sendiri, tidak bisa ubah role_id & status.
+     *
      * @param UpdateUserRequest $request
      * @param int $id_user
      * @return \Illuminate\Http\JsonResponse
@@ -50,16 +53,30 @@ class UserController extends Controller
      * @bodyParam username string optional Example: budisetiawan
      * @bodyParam nomor_identitas string optional Example: C00013
      * @bodyParam email string optional Example: budi@mahasiswa.simpadu.ac.id
-     * @bodyParam role_id int optional Example: 2
+     * @bodyParam role_id int optional (Super Admin only) Example: 2
      * @bodyParam password string optional Example: newpassword123
-     * @bodyParam status string optional Example: nonaktif
+     * @bodyParam status string optional (Super Admin only) Example: nonaktif
      */
     public function updateUser(UpdateUserRequest $request, $id_user)
     {
         $user = User::findOrFail($id_user);
-        $user->update($request->validated());
+        $authUser = auth()->user();
+        $authRoleIds = $authUser->roles->pluck('id_role')->toArray();
+        $isSuperAdmin = in_array(1, $authRoleIds);
 
-        if ($request->has('role_id')) {
+        if (!$isSuperAdmin && $authUser->id !== (int) $id_user) {
+            abort(403, 'Forbidden: Anda hanya dapat mengubah akun milik Anda sendiri.');
+        }
+
+        $data = $request->validated();
+
+        if (!$isSuperAdmin) {
+            unset($data['role_id'], $data['status']);
+        }
+
+        $user->update($data);
+
+        if ($request->has('role_id') && $isSuperAdmin) {
             $roleIds = [$request->role_id];
             if (in_array((int) $request->role_id, [2, 3, 4, 5, 7], true)) {
                 $roleIds[] = 8;
