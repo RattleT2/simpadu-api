@@ -10,14 +10,31 @@ class MataKuliahController extends Controller
 {
     /**
      * Menampilkan daftar mata kuliah.
+     * Query param: ?tahun_akademik_id=20261 (wajib untuk admin_mahasiswa / role 4)
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $mataKuliah = MataKuliah::with('prodi')->get();
+        $user = auth()->user();
+        $tahunAkademikId = request('tahun_akademik_id');
 
-        return response()->json($mataKuliah);
+        // Admin mahasiswa (role 4) wajib menyertakan tahun_akademik_id
+        if ($user->role_id == 4 && ! $tahunAkademikId) {
+            return response()->json([
+                'message' => 'Parameter tahun_akademik_id wajib diisi',
+            ], 422);
+        }
+
+        $query = MataKuliah::with('prodi');
+
+        if ($tahunAkademikId) {
+            $query->whereHas('jadwals', function ($q) use ($tahunAkademikId) {
+                $q->where('tahun_akademik_id', $tahunAkademikId);
+            });
+        }
+
+        return response()->json($query->get());
     }
 
     /**
