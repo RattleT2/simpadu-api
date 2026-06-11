@@ -104,6 +104,8 @@ Membuat akun (semua role).
 ```
 
 > **Auto Role 8:** Jika `role_id` adalah 2, 3, 4, 5, atau 7, user otomatis juga mendapatkan role 8 (`pegawai`) di pivot `role_user`.
+>
+> **⚠️ PENTING — UNIQUE:** `username`, `email`, dan `nomor_identitas` bersifat **UNIQUE** (tidak boleh sama dengan data user lain yang sudah ada). Jangan copy-paste contoh di atas mentah-mentah — ganti nilainya setiap membuat user baru. Jika error `422` dengan pesan _"has already been taken"_, berarti data tersebut sudah dipakai.
 
 ---
 
@@ -867,6 +869,8 @@ Membuat akun dosen baru. `role_id` otomatis 7, `status` otomatis `aktif`, dan ot
 }
 ```
 
+> **⚠️ PENTING — UNIQUE:** `username`, `email`, dan `nomor_identitas` bersifat **UNIQUE** (tidak boleh sama dengan user lain yang sudah ada). Jangan copy-paste contoh di atas mentah-mentah — ganti nilainya setiap membuat dosen baru. Jika error `422` dengan pesan _"has already been taken"_, berarti data tersebut sudah dipakai.
+
 #### #51. GET `/api/akademik/semester`
 Menampilkan seluruh data semester.
 
@@ -1023,6 +1027,8 @@ Mahasiswa langsung ditempatkan ke semester dan program studi yang dipilih.
 
 > **Validasi:** `prodi_id` harus ada di tabel `prodis`. `semester_id` harus ada di tabel `semesters`.
 > Prodi dan semester bisa diambil dari `GET /api/akademik/prodis` dan `GET /api/akademik/semester`.
+>
+> **⚠️ PENTING — UNIQUE:** `username`, `email`, dan `nomor_identitas` bersifat **UNIQUE** (tidak boleh sama dengan mahasiswa lain yang sudah ada). Jangan copy-paste contoh JSON di atas mentah-mentah — ganti `username`, `email`, dan `nomor_identitas` setiap kali mendaftarkan mahasiswa baru. Jika error `422` dengan pesan _"has already been taken"_, berarti data tersebut sudah dipakai user lain.
 
 ---
 
@@ -1441,6 +1447,8 @@ Menampilkan daftar kelas yang diajar oleh dosen yang sedang login (difilter dari
   }
 ]
 ```
+
+> **⚠️ PENTING — UNIQUE:** `username`, `email`, dan `nomor_identitas` bersifat **UNIQUE** (tidak boleh sama dengan user lain yang sudah ada). Jangan copy-paste contoh di atas mentah-mentah — ganti nilainya setiap membuat dosen baru. Jika error `422` dengan pesan _"has already been taken"_, berarti data tersebut sudah dipakai.
 
 #### #51. GET `/api/akademik/semester`
 Menampilkan seluruh data semester.
