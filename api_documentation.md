@@ -610,9 +610,26 @@ Menampilkan seluruh Prodi dengan relasi Jurusan.
 
 #### #21. GET `/api/akademik/mata-kuliah`
 
-Menampilkan daftar mata kuliah.
+Menampilkan daftar mata kuliah. Mendukung query param `tahun_akademik_id` untuk filter berdasarkan jadwal di tahun akademik tertentu.
 
-**Hak Akses:** Admin Akademik, Dosen, Mahasiswa
+**Hak Akses:** Admin Akademik, Admin Mahasiswa, Dosen, Mahasiswa
+
+**Query Parameters (opsional):**
+| Param | Tipe | Keterangan |
+|-------|------|------------|
+| `tahun_akademik_id` | int | Filter mata kuliah yang memiliki jadwal di tahun akademik tertentu. **Wajib diisi** jika login sebagai Mahasiswa (role 6). |
+
+**Contoh Request:**
+```
+GET /api/akademik/mata-kuliah?tahun_akademik_id=20261
+```
+
+**Error Response (Mahasiswa tanpa param):**
+```json
+{
+  "message": "Parameter tahun_akademik_id wajib diisi"
+}
+```
 
 ---
 
@@ -1338,7 +1355,7 @@ Menampilkan KHS riwayat per semester. **Hanya data sendiri.**
 Menampilkan seluruh Jurusan.
 
 #### #21. GET `/api/akademik/mata-kuliah`
-Menampilkan daftar mata kuliah.
+Menampilkan daftar mata kuliah. **Wajib** menyertakan parameter `?tahun_akademik_id=...`.
 
 #### #22. GET `/api/akademik/mata-kuliah/{id_mk}`
 Menampilkan detail satu mata kuliah.
@@ -1395,7 +1412,7 @@ Menambahkan Nilai Mahasiswa.
 Mengupdate isi absensi pertemuan p1-p16.
 
 #### #21. GET `/api/akademik/mata-kuliah`
-Menampilkan daftar mata kuliah.
+Menampilkan daftar mata kuliah. Opsional: `?tahun_akademik_id=...`.
 
 #### #22. GET `/api/akademik/mata-kuliah/{id_mk}`
 Menampilkan detail satu mata kuliah.

@@ -19,8 +19,8 @@ class MataKuliahController extends Controller
         $user = auth()->user();
         $tahunAkademikId = request('tahun_akademik_id');
 
-        // Admin mahasiswa (role 4) wajib menyertakan tahun_akademik_id
-        if ($user->role_id == 4 && ! $tahunAkademikId) {
+        // Mahasiswa (role 6) wajib menyertakan tahun_akademik_id
+        if ($user->role_id == 6 && ! $tahunAkademikId) {
             return response()->json([
                 'message' => 'Parameter tahun_akademik_id wajib diisi',
             ], 422);
