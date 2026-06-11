@@ -308,9 +308,44 @@ Menampilkan seluruh data kelas. Response menyertakan `kapasitas_mahasiswa` dan `
 
 #### #8. GET `/api/akademik/kelas/{id_kelas}`
 
-Menampilkan detail satu kelas. Response menyertakan `kapasitas_mahasiswa` dan `jumlah_mahasiswa`.
+Menampilkan detail satu kelas + daftar mahasiswa yang terdaftar (dari tabel `mahasiswa_kelas`).
 
 **Hak Akses:** Semua admin (kecuali Mahasiswa)
+
+**Contoh Response:**
+```json
+{
+  "kelas": {
+    "id": 1,
+    "tahun_akademik_id": 20261,
+    "prodi_id": 7,
+    "kode_kelas": "TI-2A",
+    "nama_kelas": "Teknik Informatika 2A",
+    "kapasitas_mahasiswa": 40,
+    "jumlah_mahasiswa": 20,
+    "status": "aktif",
+    "prodi": {
+      "id": 7,
+      "nama_prodi": "D3 Teknik Informatika"
+    },
+    "tahun_akademik": {
+      "id": 20261,
+      "tahun_akademik": "2026 ganjil"
+    }
+  },
+  "mahasiswa": [
+    {
+      "id": 32,
+      "name": "Ahmad Fauzi",
+      "nim": "C007260001",
+      "email": "c007260001@mahasiswa.ac.id",
+      "prodi_id": 7,
+      "semester_id": 5,
+      "tanggal_daftar": "2026-06-10T00:00:00.000000Z"
+    }
+  ]
+}
+```
 
 ---
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KelasRequest;
 use App\Models\Kelas;
+use App\Models\MahasiswaKelas;
 use App\Models\MahasiswaKelasMk;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,7 @@ class KelasController extends Controller
     }
 
     /**
-     * Menampilkan detail satu kelas.
+     * Menampilkan detail satu kelas beserta daftar mahasiswa terdaftar.
      *
      * @param int $id_kelas
      * @return \Illuminate\Http\JsonResponse
@@ -39,7 +40,26 @@ class KelasController extends Controller
             $query->select(DB::raw('count(distinct nim)'));
         }]);
 
-        return response()->json($kelas);
+        $daftarMahasiswa = MahasiswaKelas::with('mahasiswa')
+            ->where('kelas_id', $id_kelas)
+            ->where('status', 'aktif')
+            ->get()
+            ->map(function ($mk) {
+                return [
+                    'id' => $mk->mahasiswa->id ?? null,
+                    'name' => $mk->mahasiswa->name ?? null,
+                    'nim' => $mk->mahasiswa->nomor_identitas ?? null,
+                    'email' => $mk->mahasiswa->email ?? null,
+                    'prodi_id' => $mk->mahasiswa->prodi_id ?? null,
+                    'semester_id' => $mk->mahasiswa->semester_id ?? null,
+                    'tanggal_daftar' => $mk->tanggal_daftar,
+                ];
+            });
+
+        return response()->json([
+            'kelas' => $kelas,
+            'mahasiswa' => $daftarMahasiswa,
+        ]);
     }
 
     /**
