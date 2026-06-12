@@ -608,21 +608,23 @@ Menampilkan seluruh Prodi dengan relasi Jurusan.
 
 ### 📋 Mata Kuliah
 
-#### #21. GET `/api/akademik/mata-kuliah`
+#### #21. GET `/api/akademik/mata-kuliah` — **Daftar (pakai query param `?tahun_akademik_id=`)**
 
-Menampilkan daftar mata kuliah. Mendukung query param `tahun_akademik_id` untuk filter berdasarkan jadwal di tahun akademik tertentu.
+Menampilkan daftar mata kuliah. Gunakan query param `tahun_akademik_id` untuk filter berdasarkan jadwal di tahun akademik tertentu.
+
+> **⚠️ Bedakan:** `?tahun_akademik_id=20261` adalah **query param** (filter daftar), sedangkan `/{id_mk}` adalah **path segment** (detail satu MK). Jangan menulis `/api/akademik/mata-kuliah/20261` — itu akan mencari MK dengan `id_mk=20261`, bukan filter per tahun!
 
 **Hak Akses:** Admin Akademik, Admin Mahasiswa, Dosen, Mahasiswa
 
-**Query Parameters (opsional):**
+| Cara | URL | Hasil |
+|------|-----|-------|
+| Semua | `GET /api/akademik/mata-kuliah` | Semua matakuliah |
+| Filter tahun | `GET /api/akademik/mata-kuliah?tahun_akademik_id=20261` | Matakuliah yang punya jadwal di tahun 20261 |
+
+**Query Parameters:**
 | Param | Tipe | Keterangan |
 |-------|------|------------|
 | `tahun_akademik_id` | int | Filter mata kuliah yang memiliki jadwal di tahun akademik tertentu. **Wajib diisi** jika login sebagai Mahasiswa (role 6). |
-
-**Contoh Request:**
-```
-GET /api/akademik/mata-kuliah?tahun_akademik_id=20261
-```
 
 **Error Response (Mahasiswa tanpa param):**
 ```json
@@ -633,11 +635,17 @@ GET /api/akademik/mata-kuliah?tahun_akademik_id=20261
 
 ---
 
-#### #22. GET `/api/akademik/mata-kuliah/{id_mk}`
+#### #22. GET `/api/akademik/mata-kuliah/{id_mk}` — **Detail SATU MK (pakai path `/{id_mk}`)**
 
-Menampilkan detail satu mata kuliah.
+Menampilkan detail satu mata kuliah berdasarkan `id_mk`.
 
-**Hak Akses:** Admin Akademik, Dosen, Mahasiswa
+**Hak Akses:** Admin Akademik, Admin Mahasiswa, Dosen, Mahasiswa
+
+| Cara | URL | Hasil |
+|------|-----|-------|
+| Detail | `GET /api/akademik/mata-kuliah/9` | Detail matakuliah dengan `id_mk=9` |
+
+> **Mahasiswa (role 6):** Hanya bisa melihat detail MK yang dia ambil. Jika tidak terdaftar → **403** `"Anda tidak terdaftar di mata kuliah ini"`.
 
 ---
 
@@ -1354,11 +1362,11 @@ Menampilkan KHS riwayat per semester. **Hanya data sendiri.**
 #### #17. GET `/api/akademik/jurusan`
 Menampilkan seluruh Jurusan.
 
-#### #21. GET `/api/akademik/mata-kuliah`
-Menampilkan daftar mata kuliah. **Wajib** menyertakan parameter `?tahun_akademik_id=...`.
+#### #21. GET `/api/akademik/mata-kuliah?tahun_akademik_id=...`
+Menampilkan daftar matakuliah yang diambil mahasiswa. **Wajib** pakai query param `?tahun_akademik_id=...` (jangan tulis `/mata-kuliah/20261`).
 
 #### #22. GET `/api/akademik/mata-kuliah/{id_mk}`
-Menampilkan detail satu mata kuliah.
+Detail satu matakuliah. **Hanya jika terdaftar di MK tersebut, else 403.**
 
 #### #25. GET `/api/akademik/mahasiswa-kelas`
 Menampilkan seluruh data plotting.

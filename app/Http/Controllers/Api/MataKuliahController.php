@@ -10,7 +10,7 @@ class MataKuliahController extends Controller
 {
     /**
      * Menampilkan daftar mata kuliah.
-     * Query param: ?tahun_akademik_id=20261 (wajib untuk admin_mahasiswa / role 4)
+     * Query param: ?tahun_akademik_id=20261 (wajib untuk mahasiswa / role 6)
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -34,18 +34,39 @@ class MataKuliahController extends Controller
             });
         }
 
+        // Mahasiswa hanya melihat matakuliah yang dia ambil
+        if ($user->role_id == 6) {
+            $query->whereHas('mahasiswaKelasMk', function ($q) use ($user) {
+                $q->where('nim', $user->nomor_identitas);
+            });
+        }
+
         return response()->json($query->get());
     }
 
     /**
      * Menampilkan detail satu mata kuliah.
+     * Mahasiswa hanya bisa melihat matakuliah yang dia ambil.
      *
      * @param int $id_mk
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id_mk)
     {
+        $user = auth()->user();
         $mataKuliah = MataKuliah::with('prodi')->findOrFail($id_mk);
+
+        if ($user->role_id == 6) {
+            $enrolled = $mataKuliah->mahasiswaKelasMk()
+                ->where('nim', $user->nomor_identitas)
+                ->exists();
+
+            if (! $enrolled) {
+                return response()->json([
+                    'message' => 'Anda tidak terdaftar di mata kuliah ini',
+                ], 403);
+            }
+        }
 
         return response()->json($mataKuliah);
     }
