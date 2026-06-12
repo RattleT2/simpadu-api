@@ -34,10 +34,13 @@ class MataKuliahController extends Controller
             });
         }
 
-        // Mahasiswa hanya melihat matakuliah yang dia ambil
+        // Mahasiswa hanya melihat matakuliah yang dia ambil di tahun akademik tersebut
         if ($user->role_id == 6) {
-            $query->whereHas('mahasiswaKelasMk', function ($q) use ($user) {
-                $q->where('nim', $user->nomor_identitas);
+            $query->whereHas('mahasiswaKelasMk', function ($q) use ($user, $tahunAkademikId) {
+                $q->where('nim', $user->nomor_identitas)
+                  ->whereHas('kelas', function ($q2) use ($tahunAkademikId) {
+                      $q2->where('tahun_akademik_id', $tahunAkademikId);
+                  });
             });
         }
 

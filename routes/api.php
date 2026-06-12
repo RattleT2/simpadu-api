@@ -62,8 +62,10 @@ Route::prefix('akademik')->group(function () {
             Route::get('dosen/beban-mengajar', [KelasController::class, 'bebanMengajar']);      // #49
 
             Route::post('jurusan', [JurusanController::class, 'store']);                       // #18
+            Route::put('jurusan/{id}', [JurusanController::class, 'update']);                  // #63
             Route::get('jurusan/{jurusan_id}/prodis', [ProdiController::class, 'byJurusan']);  // #19
             Route::post('prodis', [ProdiController::class, 'store']);                          // #20
+            Route::put('prodis/{id}', [ProdiController::class, 'update']);                     // #64
 
             Route::post('mata-kuliah', [MataKuliahController::class, 'store']);                // #23
             Route::put('mata-kuliah/{id_mk}', [MataKuliahController::class, 'update']);        // #24
@@ -116,6 +118,11 @@ Route::prefix('akademik')->group(function () {
             Route::get('jadwal', [JadwalController::class, 'index']);                          // #38
             Route::get('jadwal/{id}', [JadwalController::class, 'show']);                      // #39
             Route::get('dosen/kelas', [KelasController::class, 'dosenKelas']);                  // #46
+        });
+
+        // Dosen only (7) - jadwal + materi + presensi
+        Route::middleware('role:7')->group(function () {
+            Route::get('dosen/jadwal-materi', [JadwalController::class, 'jadwalMateri']);       // #62
         });
 
         // Admin Pegawai only (3) - CRUD jadwal

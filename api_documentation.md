@@ -2,7 +2,7 @@
 
 > **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
-> **Total Endpoint:** 61
+> **Total Endpoint:** 64
 
 ---
 
@@ -574,6 +574,21 @@ Menambahkan Jurusan Baru.
 
 ---
 
+#### #63. PUT `/api/akademik/jurusan/{id}`
+
+Mengubah nama jurusan berdasarkan ID.
+
+**Hak Akses:** Admin Akademik
+
+**JSON Body:**
+```json
+{
+  "nama_jurusan": "Teknik Elektro"
+}
+```
+
+---
+
 #### #19. GET `/api/akademik/jurusan/{jurusan_id}/prodis`
 
 Menampilkan seluruh Prodi dalam SATU jurusan.
@@ -593,6 +608,22 @@ Menambahkan Prodi baru dan relasi ke Jurusan.
 {
   "jurusan_id": 1,
   "nama_prodi": "D4 Teknik Mesin"
+}
+```
+
+---
+
+#### #64. PUT `/api/akademik/prodis/{id}`
+
+Mengubah prodi berdasarkan ID.
+
+**Hak Akses:** Admin Akademik
+
+**JSON Body:**
+```json
+{
+  "jurusan_id": 1,
+  "nama_prodi": "D4 Teknik Elektro"
 }
 ```
 
@@ -1499,7 +1530,58 @@ Download file materi.
 #### #61. POST `/api/akademik/jadwal/{jadwalId}/pertemuan/{pertemuanKe}/presensi`
 Batch update presensi untuk satu pertemuan — semua mahasiswa sekaligus.
 
-**Total: 22 endpoint**
+#### #62. GET `/api/akademik/dosen/jadwal-materi`
+Menampilkan seluruh jadwal + 16 pertemuan (materi & presensi) untuk dosen yang sedang login.
+
+**Hak Akses:** Dosen
+
+**Query Parameters (opsional):**
+| Param | Tipe | Keterangan |
+|-------|------|------------|
+| `tahun_akademik_id` | int | Filter jadwal berdasarkan tahun akademik. |
+
+**Contoh Request:**
+```
+GET /api/akademik/dosen/jadwal-materi?tahun_akademik_id=20261
+```
+
+**Contoh Response:**
+```json
+[
+  {
+    "id": 1,
+    "hari": "Senin",
+    "jam_mulai": "08:00",
+    "jam_selesai": "10:00",
+    "mata_kuliah": {
+      "id_mk": 5,
+      "nama_mk": "Pemrograman Web",
+      "sks": 3,
+      "prodi": { "id": 3, "nama_prodi": "D3 Teknik Informatika" }
+    },
+    "kelas": { "id": 1, "nama_kelas": "TI-2A" },
+    "tahun_akademik": { "id": 20261, "tahun_akademik": "2026 ganjil" },
+    "pertemuan": [
+      {
+        "pertemuan_ke": 1,
+        "topik_materi": "Pengenalan",
+        "deskripsi": "Membahas dasar-dasar",
+        "file_path": null,
+        "file_name": null,
+        "file_type": null,
+        "presensi": [
+          { "id_mahasiswa_mk": 1, "nim": "C001", "nama": "Budi", "status": "H" },
+          { "id_mahasiswa_mk": 2, "nim": "C002", "nama": "Ani", "status": "I" }
+        ]
+      },
+      { "pertemuan_ke": 2, "topik_materi": null, "presensi": [...] },
+      { "pertemuan_ke": 16, "topik_materi": null, "presensi": [...] }
+    ]
+  }
+]
+```
+
+**Total: 23 endpoint**
 
 ---
 
@@ -1568,6 +1650,9 @@ Batch update presensi untuk satu pertemuan — semua mahasiswa sekaligus.
 | 59 | DELETE `/api/akademik/jadwal/{jadwalId}/materi/{pertemuanKe}/file` | ✅ | ✅ | ✅ | - | - | - | ✅ |
 | 60 | GET `/api/akademik/materi/download/{id}` | ✅ | ✅ | ✅ | - | - | - | ✅ |
 | 61 | POST `/api/akademik/jadwal/{jadwalId}/pertemuan/{pertemuanKe}/presensi` | ✅ | ✅ | ✅ | - | - | - | ✅ |
+| 62 | GET `/api/akademik/dosen/jadwal-materi` | - | - | - | - | - | - | ✅ |
+| 63 | PUT `/api/akademik/jurusan/{id}` | ✅ | ✅ | - | - | - | - | - |
+| 64 | PUT `/api/akademik/prodis/{id}` | ✅ | ✅ | - | - | - | - | - |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  

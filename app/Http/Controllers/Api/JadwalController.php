@@ -148,4 +148,71 @@ class JadwalController extends Controller
             'updated' => $updated,
         ]);
     }
+
+    /**
+     * Menampilkan jadwal + materi 16 pertemuan + presensi mahasiswa
+     * untuk dosen yang sedang login.
+     *
+     * Query param opsional: ?tahun_akademik_id=20261
+     */
+    public function jadwalMateri()
+    {
+        $user = auth()->user();
+        $tahunAkademikId = request('tahun_akademik_id');
+
+        $query = Jadwal::with([
+            'mataKuliah:id_mk,nama_mk,sks,prodi_id',
+            'mataKuliah.prodi:id,nama_prodi',
+            'kelas:id,nama_kelas',
+            'tahunAkademik:id,tahun_akademik',
+            'materiPertemuan' => fn($q) => $q->orderBy('pertemuan_ke'),
+        ])->where('dosen_id', $user->id);
+
+        if ($tahunAkademikId) {
+            $query->where('tahun_akademik_id', $tahunAkademikId);
+        }
+
+        $jadwals = $query->get();
+
+        $result = $jadwals->map(function ($jadwal) {
+            $mahasiswaList = MahasiswaKelasMk::with('mahasiswa:id,name,nomor_identitas')
+                ->where('mata_kuliah_id', $jadwal->mata_kuliah_id)
+                ->where('id_kelas', $jadwal->id_kelas)
+                ->whereNotNull('nim')
+                ->get();
+
+            $pertemuan = collect(range(1, 16))->map(function ($ke) use ($jadwal, $mahasiswaList) {
+                $materi = $jadwal->materiPertemuan->firstWhere('pertemuan_ke', $ke);
+                $col = 'p' . $ke;
+
+                return [
+                    'pertemuan_ke' => $ke,
+                    'topik_materi' => $materi->topik_materi ?? null,
+                    'deskripsi'    => $materi->deskripsi ?? null,
+                    'file_path'    => $materi->file_path ?? null,
+                    'file_name'    => $materi->file_name ?? null,
+                    'file_type'    => $materi->file_type ?? null,
+                    'presensi'     => $mahasiswaList->map(fn($m) => [
+                        'id_mahasiswa_mk' => $m->id_mahasiswa_mk,
+                        'nim'             => $m->nim,
+                        'nama'            => $m->mahasiswa->name ?? null,
+                        'status'          => $m->$col,
+                    ])->values(),
+                ];
+            });
+
+            return [
+                'id'             => $jadwal->id,
+                'hari'           => $jadwal->hari,
+                'jam_mulai'      => $jadwal->jam_mulai ? $jadwal->jam_mulai->format('H:i') : null,
+                'jam_selesai'    => $jadwal->jam_selesai ? $jadwal->jam_selesai->format('H:i') : null,
+                'mata_kuliah'    => $jadwal->mataKuliah,
+                'kelas'          => $jadwal->kelas,
+                'tahun_akademik' => $jadwal->tahunAkademik,
+                'pertemuan'      => $pertemuan,
+            ];
+        });
+
+        return response()->json($result);
+    }
 }
