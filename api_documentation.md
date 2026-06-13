@@ -850,10 +850,10 @@ Menampilkan seluruh data plotting.
 Menampilkan detail plotting.
 
 #### #38. GET `/api/akademik/jadwal`
-Menampilkan seluruh jadwal.
+Menampilkan seluruh jadwal. **Dosen hanya melihat jadwal miliknya sendiri.**
 
 #### #39. GET `/api/akademik/jadwal/{id}`
-Menampilkan detail jadwal + daftar mahasiswa.
+Menampilkan detail jadwal + daftar mahasiswa. **Dosen hanya lihat jika miliknya, else 403.**
 
 #### #46. GET `/api/akademik/dosen/kelas`
 
@@ -1463,10 +1463,10 @@ Menampilkan seluruh data plotting.
 Menampilkan detail plotting.
 
 #### #38. GET `/api/akademik/jadwal`
-Menampilkan seluruh jadwal.
+Menampilkan seluruh jadwal. **Dosen hanya melihat jadwal miliknya sendiri.**
 
 #### #39. GET `/api/akademik/jadwal/{id}`
-Menampilkan detail jadwal + daftar mahasiswa.
+Menampilkan detail jadwal + daftar mahasiswa. **Dosen hanya lihat jika miliknya, else 403.**
 
 #### #45. GET `/api/akademik/users/me`
 Menampilkan profil user yang sedang login.

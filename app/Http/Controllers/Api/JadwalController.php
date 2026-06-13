@@ -13,25 +13,40 @@ class JadwalController extends Controller
 {
     /**
      * Menampilkan seluruh data jadwal.
+     * Dosen hanya melihat jadwal miliknya sendiri.
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $jadwal = Jadwal::with(['mataKuliah', 'dosen', 'kelas', 'tahunAkademik'])->get();
+        $user = auth()->user();
 
-        return response()->json($jadwal);
+        $query = Jadwal::with(['mataKuliah', 'dosen', 'kelas', 'tahunAkademik']);
+
+        if ($user->role_id == 7) {
+            $query->where('dosen_id', $user->id);
+        }
+
+        return response()->json($query->get());
     }
 
     /**
      * Menampilkan detail satu jadwal beserta daftar mahasiswa terdaftar.
+     * Dosen hanya bisa melihat detail jadwal miliknya sendiri.
      *
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
+        $user = auth()->user();
         $jadwal = Jadwal::with(['mataKuliah', 'dosen', 'kelas', 'tahunAkademik'])->findOrFail($id);
+
+        if ($user->role_id == 7 && $jadwal->dosen_id !== $user->id) {
+            return response()->json([
+                'message' => 'Anda hanya bisa melihat jadwal milik sendiri',
+            ], 403);
+        }
 
         $mahasiswa = MahasiswaKelasMk::with('mahasiswa')
             ->where('mata_kuliah_id', $jadwal->mata_kuliah_id)
