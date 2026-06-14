@@ -2,7 +2,7 @@
 
 > **Base URL:** `http://admin4e06.vps-poliban.my.id`  
 > **Auth:** JWT Bearer Token  
-> **Total Endpoint:** 64
+> **Total Endpoint:** 67
 
 ---
 
@@ -387,6 +387,42 @@ Mengubah data kelas.
 **Hak Akses:** Admin Akademik
 
 **JSON Body:** _(Sama seperti POST kelas)_
+
+---
+
+#### #66. POST `/api/akademik/kelas/{id_kelas}/dosen`
+
+Admin Akademik mengassign dosen pengajar ke kelas + mata kuliah.
+
+**Hak Akses:** Admin Akademik
+
+**JSON Body:**
+```json
+{
+  "mata_kuliah_id": 5,
+  "dosen_id": 8,
+  "tahun_akademik_id": 20261
+}
+```
+
+> **Validasi:** `dosen_id` harus role_id = 7. Kombinasi MK + kelas + tahun akademik harus unik — jika sudah ada, pakai PUT (#67).
+
+---
+
+#### #67. PUT `/api/akademik/kelas/{id_kelas}/dosen/{id}`
+
+Admin Akademik mengubah dosen pada jadwal yang sudah ada. `{id}` adalah `jadwals.id`.
+
+**Hak Akses:** Admin Akademik
+
+**JSON Body:**
+```json
+{
+  "dosen_id": 10
+}
+```
+
+> Jadwal yang diubah harus milik kelas yang sesuai (`id_kelas` di URL).
 
 ---
 
@@ -1553,6 +1589,7 @@ GET /api/akademik/dosen/jadwal-materi?tahun_akademik_id=20261
     "hari": "Senin",
     "jam_mulai": "08:00",
     "jam_selesai": "10:00",
+    "ruang": "Lab Komputer 1",
     "mata_kuliah": {
       "id_mk": 5,
       "nama_mk": "Pemrograman Web",
@@ -1581,7 +1618,19 @@ GET /api/akademik/dosen/jadwal-materi?tahun_akademik_id=20261
 ]
 ```
 
-**Total: 23 endpoint**
+#### #65. PUT `/api/akademik/dosen/jadwal/{id}/ruang`
+Dosen mengubah ruang kelas pada jadwal miliknya.
+
+**Hak Akses:** Dosen
+
+**JSON Body:**
+```json
+{
+  "ruang": "Lab Komputer 1"
+}
+```
+
+**Total: 24 endpoint**
 
 ---
 
@@ -1653,6 +1702,9 @@ GET /api/akademik/dosen/jadwal-materi?tahun_akademik_id=20261
 | 62 | GET `/api/akademik/dosen/jadwal-materi` | - | - | - | - | - | - | ✅ |
 | 63 | PUT `/api/akademik/jurusan/{id}` | ✅ | ✅ | - | - | - | - | - |
 | 64 | PUT `/api/akademik/prodis/{id}` | ✅ | ✅ | - | - | - | - | - |
+| 65 | PUT `/api/akademik/dosen/jadwal/{id}/ruang` | - | - | - | - | - | - | ✅ |
+| 66 | POST `/api/akademik/kelas/{id_kelas}/dosen` | ✅ | ✅ | - | - | - | - | - |
+| 67 | PUT `/api/akademik/kelas/{id_kelas}/dosen/{id}` | ✅ | ✅ | - | - | - | - | - |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  

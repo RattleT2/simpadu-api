@@ -15,6 +15,7 @@ class Jadwal extends Model
         'dosen_id',
         'id_kelas',
         'tahun_akademik_id',
+        'ruang',
         'hari',
         'jam_mulai',
         'jam_selesai',

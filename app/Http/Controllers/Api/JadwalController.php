@@ -221,6 +221,7 @@ class JadwalController extends Controller
                 'hari'           => $jadwal->hari,
                 'jam_mulai'      => $jadwal->jam_mulai ? $jadwal->jam_mulai->format('H:i') : null,
                 'jam_selesai'    => $jadwal->jam_selesai ? $jadwal->jam_selesai->format('H:i') : null,
+                'ruang'          => $jadwal->ruang,
                 'mata_kuliah'    => $jadwal->mataKuliah,
                 'kelas'          => $jadwal->kelas,
                 'tahun_akademik' => $jadwal->tahunAkademik,
@@ -229,5 +230,31 @@ class JadwalController extends Controller
         });
 
         return response()->json($result);
+    }
+
+    /**
+     * Dosen mengubah ruang kelas pada jadwal miliknya.
+     */
+    public function updateRuang($id)
+    {
+        $user = auth()->user();
+        $jadwal = Jadwal::findOrFail($id);
+
+        if ($jadwal->dosen_id !== $user->id) {
+            return response()->json([
+                'message' => 'Anda hanya bisa mengubah ruang pada jadwal milik sendiri',
+            ], 403);
+        }
+
+        request()->validate([
+            'ruang' => 'nullable|string|max:50',
+        ]);
+
+        $jadwal->update(['ruang' => request('ruang')]);
+
+        return response()->json([
+            'message' => 'Ruang berhasil diubah',
+            'data'    => $jadwal->load(['mataKuliah', 'dosen', 'kelas', 'tahunAkademik']),
+        ]);
     }
 }

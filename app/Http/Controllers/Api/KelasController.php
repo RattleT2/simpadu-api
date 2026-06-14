@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KelasRequest;
+use App\Models\Jadwal;
 use App\Models\Kelas;
 use App\Models\MahasiswaKelas;
 use App\Models\MahasiswaKelasMk;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class KelasController extends Controller
@@ -42,6 +44,7 @@ class KelasController extends Controller
 
         $daftarMahasiswa = MahasiswaKelas::with('mahasiswa')
             ->where('kelas_id', $id_kelas)
+            ->where('tahun_akademik_id', $kelas->tahun_akademik_id)
             ->where('status', 'aktif')
             ->get()
             ->map(function ($mk) {
@@ -192,5 +195,79 @@ class KelasController extends Controller
             })->values();
 
         return response()->json($data);
+    }
+
+    /**
+     * Admin Akademik mengassign dosen ke kelas + mata kuliah.
+     */
+    public function assignDosen($id_kelas)
+    {
+        $kelas = Kelas::findOrFail($id_kelas);
+
+        request()->validate([
+            'mata_kuliah_id'    => 'required|integer|exists:mata_kuliahs,id_mk',
+            'dosen_id'          => 'required|integer|exists:users,id',
+            'tahun_akademik_id' => 'required|integer|exists:tahun_akademiks,id',
+        ]);
+
+        $dosen = User::findOrFail(request('dosen_id'));
+        if ($dosen->role_id != 7) {
+            return response()->json(['message' => 'dosen_id harus merujuk ke dosen (role_id = 7)'], 422);
+        }
+
+        $exists = Jadwal::where('mata_kuliah_id', request('mata_kuliah_id'))
+            ->where('id_kelas', $id_kelas)
+            ->where('tahun_akademik_id', request('tahun_akademik_id'))
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'message' => 'Kombinasi MK + kelas + tahun akademik sudah memiliki jadwal. Gunakan PUT untuk mengubah.',
+            ], 409);
+        }
+
+        $jadwal = Jadwal::create([
+            'mata_kuliah_id'    => request('mata_kuliah_id'),
+            'dosen_id'          => request('dosen_id'),
+            'id_kelas'          => $id_kelas,
+            'tahun_akademik_id' => request('tahun_akademik_id'),
+            'hari'              => null,
+            'jam_mulai'         => null,
+            'jam_selesai'       => null,
+            'ruang'             => null,
+        ]);
+
+        return response()->json([
+            'message' => 'Dosen berhasil diassign ke kelas',
+            'data'    => $jadwal->load(['mataKuliah', 'dosen', 'kelas', 'tahunAkademik']),
+        ], 201);
+    }
+
+    /**
+     * Admin Akademik mengubah dosen pada jadwal yang sudah ada.
+     */
+    public function updateDosen($id_kelas, $id)
+    {
+        Kelas::findOrFail($id_kelas);
+
+        request()->validate([
+            'dosen_id' => 'required|integer|exists:users,id',
+        ]);
+
+        $dosen = User::findOrFail(request('dosen_id'));
+        if ($dosen->role_id != 7) {
+            return response()->json(['message' => 'dosen_id harus merujuk ke dosen (role_id = 7)'], 422);
+        }
+
+        $jadwal = Jadwal::where('id', $id)
+            ->where('id_kelas', $id_kelas)
+            ->firstOrFail();
+
+        $jadwal->update(['dosen_id' => request('dosen_id')]);
+
+        return response()->json([
+            'message' => 'Dosen berhasil diubah',
+            'data'    => $jadwal->load(['mataKuliah', 'dosen', 'kelas', 'tahunAkademik']),
+        ]);
     }
 }
