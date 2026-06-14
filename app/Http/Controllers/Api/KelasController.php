@@ -59,9 +59,26 @@ class KelasController extends Controller
                 ];
             });
 
+        $dosenPengajar = Jadwal::with(['dosen:id,name,nomor_identitas', 'mataKuliah:id_mk,nama_mk,sks'])
+            ->where('id_kelas', $id_kelas)
+            ->where('tahun_akademik_id', $kelas->tahun_akademik_id)
+            ->get()
+            ->map(function ($j) {
+                return [
+                    'id_jadwal'   => $j->id,
+                    'dosen'       => $j->dosen,
+                    'mata_kuliah' => $j->mataKuliah,
+                    'hari'        => $j->hari,
+                    'jam_mulai'   => $j->jam_mulai ? $j->jam_mulai->format('H:i') : null,
+                    'jam_selesai' => $j->jam_selesai ? $j->jam_selesai->format('H:i') : null,
+                    'ruang'       => $j->ruang,
+                ];
+            });
+
         return response()->json([
-            'kelas' => $kelas,
-            'mahasiswa' => $daftarMahasiswa,
+            'kelas'          => $kelas,
+            'mahasiswa'      => $daftarMahasiswa,
+            'dosen_pengajar' => $dosenPengajar,
         ]);
     }
 

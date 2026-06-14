@@ -310,7 +310,7 @@ Menampilkan seluruh data kelas. Response menyertakan `kapasitas_mahasiswa` dan `
 
 #### #8. GET `/api/akademik/kelas/{id_kelas}`
 
-Menampilkan detail satu kelas + daftar mahasiswa yang terdaftar (dari tabel `mahasiswa_kelas`).
+Menampilkan detail satu kelas + daftar mahasiswa + dosen pengajar.
 
 **Hak Akses:** Semua admin (kecuali Mahasiswa)
 
@@ -344,6 +344,17 @@ Menampilkan detail satu kelas + daftar mahasiswa yang terdaftar (dari tabel `mah
       "prodi_id": 7,
       "semester_id": 5,
       "tanggal_daftar": "2026-06-10T00:00:00.000000Z"
+    }
+  ],
+  "dosen_pengajar": [
+    {
+      "id_jadwal": 5,
+      "dosen": { "id": 8, "name": "Agus S.Kom", "nomor_identitas": "DSN008" },
+      "mata_kuliah": { "id_mk": 3, "nama_mk": "Pemrograman Web", "sks": 3 },
+      "hari": "Senin",
+      "jam_mulai": "08:00",
+      "jam_selesai": "10:00",
+      "ruang": "Lab Komputer 1"
     }
   ]
 }
