@@ -44,6 +44,10 @@ class MataKuliahController extends Controller
             });
         }
 
+        if (request('search')) {
+            $query->where('nama_mk', 'like', '%' . request('search') . '%');
+        }
+
         return response()->json($query->get());
     }
 

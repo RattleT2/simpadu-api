@@ -306,6 +306,17 @@ Menampilkan seluruh data kelas. Response menyertakan `kapasitas_mahasiswa` dan `
 
 **Hak Akses:** Semua admin (kecuali Mahasiswa)
 
+**Query Parameters (opsional):**
+| Param | Tipe | Keterangan |
+|-------|------|------------|
+| `tahun_akademik_id` | int | Filter kelas berdasarkan tahun akademik. |
+| `search` | string | Cari berdasarkan `nama_kelas` (LIKE). |
+
+**Contoh Request:**
+```
+GET /api/akademik/kelas?tahun_akademik_id=20261&search=TI
+```
+
 ---
 
 #### #8. GET `/api/akademik/kelas/{id_kelas}`
@@ -698,11 +709,14 @@ Menampilkan daftar mata kuliah. Gunakan query param `tahun_akademik_id` untuk fi
 |------|-----|-------|
 | Semua | `GET /api/akademik/mata-kuliah` | Semua matakuliah |
 | Filter tahun | `GET /api/akademik/mata-kuliah?tahun_akademik_id=20261` | Matakuliah yang punya jadwal di tahun 20261 |
+| Search | `GET /api/akademik/mata-kuliah?search=Pemrograman` | Matakuliah dengan `nama_mk` mengandung "Pemrograman" |
+| Gabungan | `GET /api/akademik/mata-kuliah?tahun_akademik_id=20261&search=Web` | Filter tahun + search |
 
 **Query Parameters:**
 | Param | Tipe | Keterangan |
 |-------|------|------------|
 | `tahun_akademik_id` | int | Filter mata kuliah yang memiliki jadwal di tahun akademik tertentu. **Wajib diisi** jika login sebagai Mahasiswa (role 6). |
+| `search` | string | Cari berdasarkan `nama_mk` (LIKE). |
 
 **Error Response (Mahasiswa tanpa param):**
 ```json

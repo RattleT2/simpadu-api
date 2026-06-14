@@ -20,13 +20,20 @@ class KelasController extends Controller
      */
     public function index()
     {
-        $kelas = Kelas::with(['prodi', 'tahunAkademik'])
-            ->withCount(['mahasiswaKelasMk as jumlah_mahasiswa' => function ($query) {
-                $query->select(DB::raw('count(distinct nim)'));
-            }])
-            ->get();
+        $query = Kelas::with(['prodi', 'tahunAkademik'])
+            ->withCount(['mahasiswaKelasMk as jumlah_mahasiswa' => function ($q) {
+                $q->select(DB::raw('count(distinct nim)'));
+            }]);
 
-        return response()->json($kelas);
+        if (request('tahun_akademik_id')) {
+            $query->where('tahun_akademik_id', request('tahun_akademik_id'));
+        }
+
+        if (request('search')) {
+            $query->where('nama_kelas', 'like', '%' . request('search') . '%');
+        }
+
+        return response()->json($query->get());
     }
 
     /**
