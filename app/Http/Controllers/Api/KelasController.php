@@ -239,32 +239,27 @@ class KelasController extends Controller
             return response()->json(['message' => 'dosen_id harus merujuk ke dosen (role_id = 7)'], 422);
         }
 
-        $exists = Jadwal::where('mata_kuliah_id', request('mata_kuliah_id'))
-            ->where('id_kelas', $id_kelas)
-            ->where('tahun_akademik_id', request('tahun_akademik_id'))
-            ->exists();
+        $jadwal = Jadwal::updateOrCreate(
+            [
+                'mata_kuliah_id'    => request('mata_kuliah_id'),
+                'id_kelas'          => $id_kelas,
+                'tahun_akademik_id' => request('tahun_akademik_id'),
+            ],
+            [
+                'dosen_id'    => request('dosen_id'),
+                'hari'        => null,
+                'jam_mulai'   => null,
+                'jam_selesai' => null,
+                'ruang'       => null,
+            ]
+        );
 
-        if ($exists) {
-            return response()->json([
-                'message' => 'Kombinasi MK + kelas + tahun akademik sudah memiliki jadwal. Gunakan PUT untuk mengubah.',
-            ], 409);
-        }
-
-        $jadwal = Jadwal::create([
-            'mata_kuliah_id'    => request('mata_kuliah_id'),
-            'dosen_id'          => request('dosen_id'),
-            'id_kelas'          => $id_kelas,
-            'tahun_akademik_id' => request('tahun_akademik_id'),
-            'hari'              => null,
-            'jam_mulai'         => null,
-            'jam_selesai'       => null,
-            'ruang'             => null,
-        ]);
+        $wasUpdated = ! $jadwal->wasRecentlyCreated;
 
         return response()->json([
-            'message' => 'Dosen berhasil diassign ke kelas',
+            'message' => $wasUpdated ? 'Dosen berhasil diubah' : 'Dosen berhasil diassign ke kelas',
             'data'    => $jadwal->load(['mataKuliah', 'dosen', 'kelas', 'tahunAkademik']),
-        ], 201);
+        ], $wasUpdated ? 200 : 201);
     }
 
     /**

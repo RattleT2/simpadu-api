@@ -30,6 +30,10 @@ class TahunAkademikController extends Controller
      */
     public function store(TahunAkademikRequest $request)
     {
+        if ($request->status === 'aktif') {
+            TahunAkademik::where('status', 'aktif')->update(['status' => 'nonaktif']);
+        }
+
         $tahunAkademik = TahunAkademik::create($request->validated());
 
         return response()->json([
@@ -51,6 +55,10 @@ class TahunAkademikController extends Controller
      */
     public function update(TahunAkademikRequest $request, $id)
     {
+        if ($request->status === 'aktif') {
+            TahunAkademik::where('status', 'aktif')->where('id', '!=', $id)->update(['status' => 'nonaktif']);
+        }
+
         $tahunAkademik = TahunAkademik::findOrFail($id);
         $tahunAkademik->update($request->validated());
 
