@@ -926,7 +926,7 @@ Menampilkan detail satu kelas.
 Menambahkan Nilai Mahasiswa.
 
 #### #16. PUT `/api/akademik/pertemuan/{id_mahasiswa_mk}`
-Mengupdate isi absensi pertemuan p1-p16.
+Mengupdate isi absensi pertemuan p1-p16. **Admin Akademik, Dosen, Admin Pegawai.**
 
 #### #21. GET `/api/akademik/mata-kuliah`
 Menampilkan daftar mata kuliah.
@@ -1557,7 +1557,7 @@ Menampilkan daftar mahasiswa di kelas tersebut.
 Menambahkan Nilai Mahasiswa.
 
 #### #16. PUT `/api/akademik/pertemuan/{id_mahasiswa_mk}`
-Mengupdate isi absensi pertemuan p1-p16. **Admin Akademik, Dosen, Admin Pegawai.**
+Mengupdate isi absensi pertemuan p1-p16. **Admin Akademik, Dosen, Admin Pegawai.** **Admin Akademik, Dosen, Admin Pegawai.**
 
 #### #21. GET `/api/akademik/mata-kuliah`
 Menampilkan daftar mata kuliah. Opsional: `?tahun_akademik_id=...`.
