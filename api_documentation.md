@@ -608,7 +608,7 @@ Menampilkan KHS. Menggabungkan tabel `k_h_s` (IP Semester/Kumulatif) dengan tabe
 
 Mengupdate isi pertemuan (p1-p16) di tabel `mahasiswa_kelas_mk`.
 
-**Hak Akses:** Admin Pegawai, Dosen
+**Hak Akses:** Super Admin, Admin Akademik, Admin Pegawai, Dosen
 
 **JSON Body:**
 ```json
@@ -1557,7 +1557,7 @@ Menampilkan daftar mahasiswa di kelas tersebut.
 Menambahkan Nilai Mahasiswa.
 
 #### #16. PUT `/api/akademik/pertemuan/{id_mahasiswa_mk}`
-Mengupdate isi absensi pertemuan p1-p16.
+Mengupdate isi absensi pertemuan p1-p16. **Admin Akademik, Dosen, Admin Pegawai.**
 
 #### #21. GET `/api/akademik/mata-kuliah`
 Menampilkan daftar mata kuliah. Opsional: `?tahun_akademik_id=...`.
@@ -1726,7 +1726,7 @@ Dosen mengubah ruang kelas pada jadwal miliknya.
 | 13 | GET `/api/akademik/nilais/mahasiswa/{user_id}` | ✅ | ✅ | - | ✅ | - | 🔒 | - |
 | 14 | POST `/api/akademik/nilais` | ✅ | - | ✅ | - | - | - | ✅ |
 | 15 | GET `/api/akademik/mahasiswa/{user_id}/khs` | ✅ | ✅ | - | ✅ | - | 🔒 | - |
-| 16 | PUT `/api/akademik/pertemuan/{id_mahasiswa_mk}` | ✅ | - | ✅ | - | - | - | ✅ |
+| 16 | PUT `/api/akademik/pertemuan/{id_mahasiswa_mk}` | ✅ | ✅ | ✅ | - | - | - | ✅ |
 | 17 | GET `/api/akademik/jurusan` | ✅ | ✅ | - | ✅ | ✅ | ✅ | - |
 | 18 | POST `/api/akademik/jurusan` | ✅ | ✅ | - | - | - | - | - |
 | 19 | GET `/api/akademik/jurusan/{jurusan_id}/prodis` | ✅ | ✅ | - | - | - | - | - |

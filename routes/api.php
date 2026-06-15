@@ -117,7 +117,6 @@ Route::prefix('akademik')->group(function () {
         // Admin Pegawai & Dosen (3,7)
         Route::middleware('role:3,7')->group(function () {
             Route::post('nilais', [NilaiController::class, 'store']);                          // #14
-            Route::put('pertemuan/{id_mahasiswa_mk}', [MahasiswaKelasMkController::class, 'updatePertemuan']); // #16
             Route::get('jadwal', [JadwalController::class, 'index']);                          // #38
             Route::get('jadwal/{id}', [JadwalController::class, 'show']);                      // #39
             Route::get('dosen/kelas', [KelasController::class, 'dosenKelas']);                  // #46
@@ -139,6 +138,7 @@ Route::prefix('akademik')->group(function () {
 
         // Super Admin + Admin Akademik + Admin Pegawai + Dosen (1,2,3,7) — Materi & Batch Presensi
         Route::middleware('role:1,2,3,7')->group(function () {
+            Route::put('pertemuan/{id_mahasiswa_mk}', [MahasiswaKelasMkController::class, 'updatePertemuan']); // #16
             Route::get('jadwal/{jadwalId}/materi', [MateriController::class, 'index']);              // #55
             Route::get('jadwal/{jadwalId}/materi/{pertemuanKe}', [MateriController::class, 'show']); // #56
             Route::put('jadwal/{jadwalId}/materi/{pertemuanKe}', [MateriController::class, 'update']); // #57
