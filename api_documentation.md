@@ -414,7 +414,7 @@ Mengubah data kelas.
 
 #### #66. POST `/api/akademik/kelas/{id_kelas}/dosen`
 
-Admin Akademik mengassign dosen pengajar ke kelas + mata kuliah.
+Admin Akademik mengassign dosen pengajar ke kelas + mata kuliah. Jika kombinasi MK + kelas + tahun akademik sudah ada, dosen akan otomatis di-update.
 
 **Hak Akses:** Admin Akademik
 
@@ -427,7 +427,37 @@ Admin Akademik mengassign dosen pengajar ke kelas + mata kuliah.
 }
 ```
 
-> **Validasi:** `dosen_id` harus role_id = 7. Kombinasi MK + kelas + tahun akademik harus unik — jika sudah ada, pakai PUT (#67).
+**Response (201 — dibuat baru):**
+```json
+{
+  "message": "Dosen berhasil diassign ke kelas",
+  "data": {
+    "id": 6,
+    "mata_kuliah_id": 5,
+    "dosen_id": 8,
+    "id_kelas": 1,
+    "tahun_akademik_id": 20261,
+    "hari": null,
+    "jam_mulai": null,
+    "jam_selesai": null,
+    "ruang": null,
+    "mata_kuliah": { "id_mk": 5, "nama_mk": "Pemrograman Web", "sks": 3 },
+    "dosen": { "id": 8, "name": "Citra Lestari", "nomor_identitas": "DSN008" },
+    "kelas": { "id": 1, "nama_kelas": "TI-2A" },
+    "tahun_akademik": { "id": 20261, "tahun_akademik": "2026 ganjil" }
+  }
+}
+```
+
+**Response (200 — di-update):**
+```json
+{
+  "message": "Dosen berhasil diubah",
+  "data": { "..." }
+}
+```
+
+> **Validasi:** `dosen_id` harus role_id = 7. Jika kombinasi MK + kelas + tahun akademik **sudah ada**, dosen akan **otomatis di-update** (return 200). Jika **belum ada**, dibuat baru (return 201).
 
 ---
 
@@ -1055,7 +1085,7 @@ Menampilkan seluruh data plotting mahasiswa.
 Menampilkan detail plotting.
 #### #30. GET `/api/akademik/users/mahasiswa/{nim}`
 
-Menampilkan data mahasiswa + prodi + semester_sekarang.
+Menampilkan data mahasiswa + prodi + semester_sekarang + tahun_masuk.
 
 **Contoh Response:**
 ```json
@@ -1067,11 +1097,17 @@ Menampilkan data mahasiswa + prodi + semester_sekarang.
   "prodi_id": 3,
   "nama_prodi": "D3 Teknik Informatika",
   "semester_id": 1,
-  "semester_sekarang": 3
+  "semester_sekarang": 3,
+  "tahun_masuk_id": 20241,
+  "tahun_masuk": {
+    "id": 20241,
+    "tahun_akademik": "2024 ganjil",
+    "status": "nonaktif"
+  }
 }
 ```
 
-> `prodi_id` dan `semester_id` berasal dari kolom di tabel `users` yang diisi saat registrasi mahasiswa. `semester_sekarang` adalah `nomor_semester` dari relasi `semester`.
+> `prodi_id` dan `semester_id` berasal dari kolom di tabel `users` yang diisi saat registrasi mahasiswa. `semester_sekarang` adalah `nomor_semester` dari relasi `semester`. `tahun_masuk` adalah tahun akademik saat mahasiswa pertama kali mendaftar.
 
 #### #31. GET `/api/akademik/prodis`
 Menampilkan seluruh Prodi dengan relasi Jurusan.
@@ -1137,6 +1173,12 @@ Mahasiswa langsung ditempatkan ke semester dan program studi yang dipilih.
         "tahun_akademik": "2024 ganjil",
         "status": "nonaktif"
       }
+    },
+    "tahun_masuk_id": 20241,
+    "tahun_masuk": {
+      "id": 20241,
+      "tahun_akademik": "2024 ganjil",
+      "status": "nonaktif"
     }
   }
 }
@@ -1151,7 +1193,7 @@ Mahasiswa langsung ditempatkan ke semester dan program studi yang dipilih.
 
 #### #34. GET `/api/akademik/mahasiswa`
 
-Menampilkan list seluruh mahasiswa (role_id = 6) beserta prodi dan semester-nya.
+Menampilkan list seluruh mahasiswa (role_id = 6) beserta prodi, semester, dan tahun masuk.
 
 **Hak Akses:** Super Admin, Admin Akademik, Admin Mahasiswa
 
@@ -1180,6 +1222,12 @@ Menampilkan list seluruh mahasiswa (role_id = 6) beserta prodi dan semester-nya.
       "id": 1,
       "tahun_akademik_id": 20241,
       "nomor_semester": 3,
+      "status": "nonaktif"
+    },
+    "tahun_masuk_id": 20241,
+    "tahun_masuk": {
+      "id": 20241,
+      "tahun_akademik": "2024 ganjil",
       "status": "nonaktif"
     }
   }

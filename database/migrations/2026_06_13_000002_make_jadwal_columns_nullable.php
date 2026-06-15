@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration {
     public function up(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         DB::statement("ALTER TABLE `jadwals` MODIFY `hari` ENUM('Senin','Selasa','Rabu','Kamis','Jumat','Sabtu') NULL");
         DB::statement("ALTER TABLE `jadwals` MODIFY `jam_mulai` TIME NULL");
         DB::statement("ALTER TABLE `jadwals` MODIFY `jam_selesai` TIME NULL");
@@ -15,6 +19,10 @@ return new class extends Migration {
 
     public function down(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         DB::statement("ALTER TABLE `jadwals` MODIFY `hari` ENUM('Senin','Selasa','Rabu','Kamis','Jumat','Sabtu') NOT NULL");
         DB::statement("ALTER TABLE `jadwals` MODIFY `jam_mulai` TIME NOT NULL");
         DB::statement("ALTER TABLE `jadwals` MODIFY `jam_selesai` TIME NOT NULL");

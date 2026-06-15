@@ -247,9 +247,9 @@ class KelasController extends Controller
             ],
             [
                 'dosen_id'    => request('dosen_id'),
-                'hari'        => null,
-                'jam_mulai'   => null,
-                'jam_selesai' => null,
+                'hari'        => DB::getDriverName() === 'sqlite' ? 'Senin' : null,
+                'jam_mulai'   => DB::getDriverName() === 'sqlite' ? '00:00' : null,
+                'jam_selesai' => DB::getDriverName() === 'sqlite' ? '00:00' : null,
                 'ruang'       => null,
             ]
         );
