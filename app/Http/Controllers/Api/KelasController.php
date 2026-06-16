@@ -263,13 +263,15 @@ class KelasController extends Controller
 
     /**
      * Admin Akademik mengubah dosen pada jadwal yang sudah ada.
+     * Cari berdasarkan mata_kuliah_id + id_kelas (tanpa perlu tahu jadwal ID).
      */
-    public function updateDosen($id_kelas, $id)
+    public function updateDosen($id_kelas)
     {
-        Kelas::findOrFail($id_kelas);
+        $kelas = Kelas::findOrFail($id_kelas);
 
         request()->validate([
-            'dosen_id' => 'required|integer|exists:users,id',
+            'mata_kuliah_id' => 'required|integer|exists:mata_kuliahs,id_mk',
+            'dosen_id'       => 'required|integer|exists:users,id',
         ]);
 
         $dosen = User::findOrFail(request('dosen_id'));
@@ -277,14 +279,21 @@ class KelasController extends Controller
             return response()->json(['message' => 'dosen_id harus merujuk ke dosen (role_id = 7)'], 422);
         }
 
-        $jadwal = Jadwal::where('id', $id)
+        $jadwal = Jadwal::where('mata_kuliah_id', request('mata_kuliah_id'))
             ->where('id_kelas', $id_kelas)
-            ->firstOrFail();
+            ->where('tahun_akademik_id', $kelas->tahun_akademik_id)
+            ->first();
+
+        if (! $jadwal) {
+            return response()->json([
+                'message' => 'Jadwal tidak ditemukan untuk MK ini di kelas tersebut',
+            ], 404);
+        }
 
         $jadwal->update(['dosen_id' => request('dosen_id')]);
 
         return response()->json([
-            'message' => 'Dosen berhasil diubah',
+            'message' => 'Dosen pengajar berhasil diubah',
             'data'    => $jadwal->load(['mataKuliah', 'dosen', 'kelas', 'tahunAkademik']),
         ]);
     }

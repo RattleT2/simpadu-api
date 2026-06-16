@@ -460,20 +460,34 @@ Admin Akademik mengassign dosen pengajar ke kelas + mata kuliah. Jika kombinasi 
 
 ---
 
-#### #67. PUT `/api/akademik/kelas/{id_kelas}/dosen/{id}`
+#### #67. PUT `/api/akademik/kelas/{id_kelas}/dosen`
 
-Admin Akademik mengubah dosen pada jadwal yang sudah ada. `{id}` adalah `jadwals.id`.
+Admin Akademik mengubah dosen pengajar pada jadwal yang sudah ada. Mencari berdasarkan `mata_kuliah_id` + `id_kelas`, tidak perlu tahu jadwal ID.
 
 **Hak Akses:** Admin Akademik
 
 **JSON Body:**
 ```json
 {
+  "mata_kuliah_id": 5,
   "dosen_id": 10
 }
 ```
 
-> Jadwal yang diubah harus milik kelas yang sesuai (`id_kelas` di URL).
+**Response (200):**
+```json
+{
+  "message": "Dosen pengajar berhasil diubah",
+  "data": { "..." }
+}
+```
+
+**Error (404 — jadwal belum ada):**
+```json
+{
+  "message": "Jadwal tidak ditemukan untuk MK ini di kelas tersebut"
+}
+```
 
 ---
 
@@ -1776,7 +1790,7 @@ Dosen mengubah ruang kelas pada jadwal miliknya.
 | 64 | PUT `/api/akademik/prodis/{id}` | ✅ | ✅ | - | - | - | - | - |
 | 65 | PUT `/api/akademik/dosen/jadwal/{id}/ruang` | - | - | - | - | - | - | ✅ |
 | 66 | POST `/api/akademik/kelas/{id_kelas}/dosen` | ✅ | ✅ | - | - | - | - | - |
-| 67 | PUT `/api/akademik/kelas/{id_kelas}/dosen/{id}` | ✅ | ✅ | - | - | - | - | - |
+| 67 | PUT `/api/akademik/kelas/{id_kelas}/dosen` | ✅ | ✅ | - | - | - | - | - |
 
 > 🌐 = Public (tanpa token)  
 > ✅ = Full access  

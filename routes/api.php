@@ -68,7 +68,7 @@ Route::prefix('akademik')->group(function () {
             Route::put('prodis/{id}', [ProdiController::class, 'update']);                     // #64
 
             Route::post('kelas/{id_kelas}/dosen', [KelasController::class, 'assignDosen']);    // #66
-            Route::put('kelas/{id_kelas}/dosen/{id}', [KelasController::class, 'updateDosen']); // #67
+            Route::put('kelas/{id_kelas}/dosen', [KelasController::class, 'updateDosen']);     // #67
 
             Route::post('mata-kuliah', [MataKuliahController::class, 'store']);                // #23
             Route::put('mata-kuliah/{id_mk}', [MataKuliahController::class, 'update']);        // #24
