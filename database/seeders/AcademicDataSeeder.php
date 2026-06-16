@@ -102,20 +102,24 @@ class AcademicDataSeeder extends Seeder
             'jadwals', 'mata_kuliahs', 'kelas', 'prodis', 'jurusans',
         ];
 
-        Schema::disableForeignKeyConstraints();
+        $isFresh = DB::table('jurusans')->count() === 0;
 
-        DB::table('role_user')->where('user_id', '>=', 100)->delete();
-        DB::table('users')->where('id', '>=', 100)->delete();
+        if ($isFresh) {
+            Schema::disableForeignKeyConstraints();
 
-        foreach ($tables as $table) {
-            DB::statement("DELETE FROM `{$table}`");
-        }
+            DB::table('role_user')->where('user_id', '>=', 100)->delete();
+            DB::table('users')->where('id', '>=', 100)->delete();
 
-        Schema::enableForeignKeyConstraints();
-
-        if (DB::connection()->getDriverName() === 'sqlite') {
             foreach ($tables as $table) {
-                DB::statement("DELETE FROM sqlite_sequence WHERE name = '{$table}'");
+                DB::statement("DELETE FROM `{$table}`");
+            }
+
+            Schema::enableForeignKeyConstraints();
+
+            if (DB::connection()->getDriverName() === 'sqlite') {
+                foreach ($tables as $table) {
+                    DB::statement("DELETE FROM sqlite_sequence WHERE name = '{$table}'");
+                }
             }
         }
 
@@ -280,13 +284,19 @@ class AcademicDataSeeder extends Seeder
 
     private function seedMahasiswaDenganKelas(): void
     {
-        $userId = 100;
+        $maxUserId = DB::table('users')->max('id') ?? 99;
+        $userId = max(100, $maxUserId + 1);
         $totalCreated = 0;
 
         $semesterCache = [];
 
         foreach ($this->kelasConfig as $kelasId => $config) {
             $prodiId = $config['prodi_id'];
+
+            // Skip kelas yang sudah punya mahasiswa (append mode)
+            if (DB::table('mahasiswa_kelas')->where('kelas_id', $kelasId)->exists()) {
+                continue;
+            }
 
             $cacheKey = "{$prodiId}_{$config['nomor_semester']}";
             if (!isset($semesterCache[$cacheKey])) {
@@ -385,12 +395,18 @@ class AcademicDataSeeder extends Seeder
         $jamMulai = ['08:00', '10:00', '13:00', '08:00', '10:00'];
         $jamSelesai = ['10:00', '12:00', '15:00', '10:00', '12:00'];
 
-        $jadwalId = 50;
+        $maxJadwalId = DB::table('jadwals')->max('id') ?? 49;
+        $jadwalId = max(50, $maxJadwalId + 1);
 
         foreach ($this->kelasConfig as $kelasId => $config) {
             $prodiId = $config['prodi_id'];
 
             $kelas = DB::table('kelas')->where('id', $kelasId)->first();
+
+            // Skip kelas yang sudah punya jadwal (append mode)
+            if (DB::table('jadwals')->where('id_kelas', $kelasId)->exists()) {
+                continue;
+            }
             if (!$kelas) continue;
 
             $mkList = DB::table('mata_kuliahs')->where('prodi_id', $prodiId)->limit(2)->get();
