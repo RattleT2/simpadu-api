@@ -229,9 +229,8 @@ class KelasController extends Controller
         $kelas = Kelas::findOrFail($id_kelas);
 
         request()->validate([
-            'mata_kuliah_id'    => 'required|integer|exists:mata_kuliahs,id_mk',
-            'dosen_id'          => 'required|integer|exists:users,id',
-            'tahun_akademik_id' => 'required|integer|exists:tahun_akademiks,id',
+            'mata_kuliah_id' => 'required|integer|exists:mata_kuliahs,id_mk',
+            'dosen_id'       => 'required|integer|exists:users,id',
         ]);
 
         $dosen = User::findOrFail(request('dosen_id'));
@@ -243,7 +242,7 @@ class KelasController extends Controller
             [
                 'mata_kuliah_id'    => request('mata_kuliah_id'),
                 'id_kelas'          => $id_kelas,
-                'tahun_akademik_id' => request('tahun_akademik_id'),
+                'tahun_akademik_id' => $kelas->tahun_akademik_id,
             ],
             [
                 'dosen_id'    => request('dosen_id'),

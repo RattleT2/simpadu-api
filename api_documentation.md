@@ -422,12 +422,11 @@ Admin Akademik mengassign dosen pengajar ke kelas + mata kuliah. Jika kombinasi 
 ```json
 {
   "mata_kuliah_id": 5,
-  "dosen_id": 8,
-  "tahun_akademik_id": 20261
+  "dosen_id": 8
 }
 ```
 
-**Response (201 — dibuat baru):**
+> `tahun_akademik_id` otomatis diambil dari kelas. Tidak perlu dikirim manual.**Response (201 — dibuat baru):**
 ```json
 {
   "message": "Dosen berhasil diassign ke kelas",
