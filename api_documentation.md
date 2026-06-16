@@ -1835,6 +1835,14 @@ Dosen mengubah ruang kelas pada jadwal miliknya.
 | Dosen Otomasi Industri (TRO-4A) | ferdynurhaliza@simpadu.ac.id | admin123 |
 | Dosen Basis Data (TI-6A) | sarasfauzi@simpadu.ac.id | admin123 |
 | Dosen Pemrograman Web (TI-6A) | antonsantoso@simpadu.ac.id | admin123 |
+| Dosen Teknik Sipil 1 | gunawanwibowo@simpadu.ac.id | admin123 |
+| Dosen Teknik Sipil 2 | achmathidayat@simpadu.ac.id | admin123 |
+| Dosen Teknik Mesin 1 | suryadihamid@simpadu.ac.id | admin123 |
+| Dosen Teknik Mesin 2 | yuliantobasri@simpadu.ac.id | admin123 |
+| Dosen Akuntansi 1 | ratihkumala@simpadu.ac.id | admin123 |
+| Dosen Akuntansi 2 | andrikurnia@simpadu.ac.id | admin123 |
+
+> **Total Dosen:** 53 dosen (31 existing + 22 baru). Semua dosen baru (IDs 32–53) untuk 3 jurusan baru: Teknik Sipil (8 dosen), Teknik Mesin (6 dosen), Akuntansi (8 dosen).
 
 > **Password Mahasiswa:** Semua akun mahasiswa (role 6) hasil seeder menggunakan password **`mahasiswa123`**.
 > Format email mahasiswa: `{awalan_jurusan}{kode_prodi}{tahun}{urutan}@mahasiswa.ac.id` (contoh: `c00720240001@mahasiswa.ac.id`).

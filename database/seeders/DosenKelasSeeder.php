@@ -301,14 +301,127 @@ class DosenKelasSeeder extends Seeder
                 'status' => 'aktif',
                 'extra_roles' => [8],
             ],
+            // Dosen Baru — Teknik Sipil (IDs 32-39)
+            [
+                'id' => 32, 'name' => 'Gunawan Wibowo', 'username' => 'gunawanwibowo',
+                'nomor_identitas' => 'DSN032', 'email' => 'gunawanwibowo@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 33, 'name' => 'Hendra Susanto', 'username' => 'hendrasusanto',
+                'nomor_identitas' => 'DSN033', 'email' => 'hendrasusanto@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 34, 'name' => 'Yusuf Maulana', 'username' => 'yusufmaulana',
+                'nomor_identitas' => 'DSN034', 'email' => 'yusufmaulana@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 35, 'name' => 'Rachmat Hidayat', 'username' => 'rachmathidayat',
+                'nomor_identitas' => 'DSN035', 'email' => 'rachmathidayat@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 36, 'name' => 'Fitriani Dewi', 'username' => 'fitrianidewi',
+                'nomor_identitas' => 'DSN036', 'email' => 'fitrianidewi@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 37, 'name' => 'Supriyanto Adi', 'username' => 'supriyantoadi',
+                'nomor_identitas' => 'DSN037', 'email' => 'supriyantoadi@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 38, 'name' => 'Nurhayati Sari', 'username' => 'nurhayatisari',
+                'nomor_identitas' => 'DSN038', 'email' => 'nurhayatisari@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 39, 'name' => 'Wahyudi Tamrin', 'username' => 'wahyuditamrin',
+                'nomor_identitas' => 'DSN039', 'email' => 'wahyuditamrin@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            // Dosen Baru — Teknik Mesin (IDs 40-45)
+            [
+                'id' => 40, 'name' => 'Suryadi Hamid', 'username' => 'suryadihamid',
+                'nomor_identitas' => 'DSN040', 'email' => 'suryadihamid@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 41, 'name' => 'Yulianto Basri', 'username' => 'yuliantobasri',
+                'nomor_identitas' => 'DSN041', 'email' => 'yuliantobasri@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 42, 'name' => 'Darmawan Putra', 'username' => 'darmawanputra',
+                'nomor_identitas' => 'DSN042', 'email' => 'darmawanputra@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 43, 'name' => 'Ernawati Rahma', 'username' => 'ernawatrahma',
+                'nomor_identitas' => 'DSN043', 'email' => 'ernawatrahma@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 44, 'name' => 'Fathur Rahman', 'username' => 'faturrahman',
+                'nomor_identitas' => 'DSN044', 'email' => 'faturrahman@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 45, 'name' => 'Annisa Putri', 'username' => 'annisaputri',
+                'nomor_identitas' => 'DSN045', 'email' => 'annisaputri@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            // Dosen Baru — Akuntansi (IDs 46-53)
+            [
+                'id' => 46, 'name' => 'Ratih Kumala', 'username' => 'ratihkumala',
+                'nomor_identitas' => 'DSN046', 'email' => 'ratihkumala@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 47, 'name' => 'Andri Kurnia', 'username' => 'andrikurnia',
+                'nomor_identitas' => 'DSN047', 'email' => 'andrikurnia@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 48, 'name' => 'Sri Wahyuni', 'username' => 'sriwahyuni',
+                'nomor_identitas' => 'DSN048', 'email' => 'sriwahyuni@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 49, 'name' => 'Imam Syafii', 'username' => 'imamsyafii',
+                'nomor_identitas' => 'DSN049', 'email' => 'imamsyafii@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 50, 'name' => 'Lestari Wati', 'username' => 'lestariwati',
+                'nomor_identitas' => 'DSN050', 'email' => 'lestariwati@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 51, 'name' => 'Bambang Sutrisno', 'username' => 'bambangsutrisno',
+                'nomor_identitas' => 'DSN051', 'email' => 'bambangsutrisno@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 52, 'name' => 'Retno Palupi', 'username' => 'retnopalupi',
+                'nomor_identitas' => 'DSN052', 'email' => 'retnopalupi@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
+            [
+                'id' => 53, 'name' => 'Zaenal Abidin', 'username' => 'zaenalabidin',
+                'nomor_identitas' => 'DSN053', 'email' => 'zaenalabidin@simpadu.ac.id',
+                'password' => 'admin123', 'role_id' => 7, 'status' => 'aktif', 'extra_roles' => [8],
+            ],
         ];
 
         foreach ($dosens as $userData) {
             $extraRoles = $userData['extra_roles'];
             unset($userData['extra_roles']);
 
-            $user = User::updateOrCreate(
-                ['username' => $userData['username']],
+            $user = User::firstOrCreate(
+                ['id' => $userData['id']],
                 $userData
             );
 
